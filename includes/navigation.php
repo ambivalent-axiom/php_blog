@@ -1,5 +1,5 @@
 <?php include "includes/db.php" ?>
-   
+<?php session_start(); ?> 
    
    <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -13,7 +13,6 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="index.php">Start</a>
-                
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -29,13 +28,13 @@
                     }
                     ?>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href='admin'>Admin</a></li>
-                </ul>
+                <?php
+                    if(isset($_SESSION['role'])) {
+                        echo "<ul class='nav navbar-nav navbar-right'>
+                                <li><a href='admin'>Admin</a></li></ul>";
+                    }
+                ?>
             </div>
-
-
-
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->

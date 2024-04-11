@@ -14,14 +14,14 @@
             <ul class="nav navbar-right top-nav">
                 <li><a href="../index.php">CMS</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php getUserLnFn(); ?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                            <a href="users.php?source=edit&u_id=<?php echo $_SESSION['id']; ?>"><i class="fa fa-fw fa-user"></i> Profile</a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="../includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
@@ -42,25 +42,28 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="categories.php"><i class="fa fa-fw fa-list"></i> Categories</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#users"><i class="fa fa-fw fa-users"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="users" class="collapse">
-                            <li>
-                                <a href="users.php">View all Users</a>
-                            </li>
-                            <li>
-                                <a href="users.php?source=add_user">Add User</a>
-                            </li>
-                        </ul>
-                    </li>
+                    
+                    <?php
+                        if($_SESSION['role'] === 'admin') {
+                            echo "<li>
+                                    <a href='categories.php'><i class='fa fa-fw fa-list'></i> Categories</a>
+                                </li>
+                                <li>
+                                    <a href='javascript:;' data-toggle='collapse' data-target='#users'><i class='fa fa-fw fa-users'></i> Users <i class='fa fa-fw fa-caret-down'></i></a>
+                                    <ul id='users' class='collapse'>
+                                        <li>
+                                            <a href='users.php'>View all Users</a>
+                                        </li>
+                                        <li>
+                                            <a href='users.php?source=add_user'>Add User</a>
+                                        </li>
+                                    </ul>
+                                </li>";
+                        }
+                    ?>
+
                     <li>
                         <a href="comments.php"><i class="fa fa-fw fa-comments"></i> Comments</a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fa fa-fw fa-user"></i> Profile</a>
                     </li>
                 </ul>
             </div>

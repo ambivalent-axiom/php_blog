@@ -22,7 +22,11 @@
         // $user_image = $_FILES['user_image']['name'];
         // $user_image_temp = $_FILES['user_image']['tmp_name'];
 
-        $user_role = $_POST['user_role'];
+        if(isset($_POST['user_role'])) {
+            $user_role = $_POST['user_role'];
+        } else {
+            $user_role = $role;
+        }
 
         // move_uploaded_file($post_image_temp, "../images/user/$post_image");
         
@@ -68,20 +72,26 @@
         <label for="user_image">Image</label>
         <input type="file" name="user_image">
     </div>-->
-
-    <div class="form-group">
-        <label for="user_role">Role</label>
-        <select name="user_role" id="">
-            <option value="<?php echo $role ?>"><?php echo ucfirst($role) ?></option>
-            <?php
-                if($role == 'admin') {
-                    echo "<option value='blogger'>Blogger</option>";
-                } else {
-                    echo "<option value='admin'>Admin</option>";
-                }
+    <?php
+        if($_SESSION['role'] === 'admin') {
             ?>
-        </select>
-    </div>
+                <div class="form-group">
+                    <label for="user_role">Role</label>
+                    <select name="user_role" id="">
+                        <option value="<?php echo $role ?>"><?php echo ucfirst($role) ?></option>
+                        <?php
+                            if($role == 'admin') {
+                                echo "<option value='blogger'>Blogger</option>";
+                            } else {
+                                echo "<option value='admin'>Admin</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+            <?php
+        } 
+    ?>
+
 
     <div class="form-group">
         <button type="submit" name="update_user" class="btn btn-primary">Update User</button>

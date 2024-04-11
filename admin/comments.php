@@ -10,7 +10,7 @@
 
                         <h1 class="page-header">
                             Comments
-                            <small>John Smith</small>
+                            <small><?php getUserLnFn(); ?></small>
                         </h1>
                         <?php
                         

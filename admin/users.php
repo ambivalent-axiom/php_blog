@@ -10,7 +10,7 @@
 
                         <h1 class="page-header">
                             Users
-                            <small>John Smith</small>
+                            <small><?php getUserLnFn(); ?></small>
                         </h1>
                         <?php
                         
@@ -43,7 +43,11 @@
                                 break;
 
                                 default:
-                                include "includes/view_all_users.php";
+                                    if($_SESSION['role'] === 'admin') {
+                                        include "includes/view_all_users.php";
+                                    } else {
+                                        header("Location: index.php");
+                                    }
                                 break;
                             }
                     

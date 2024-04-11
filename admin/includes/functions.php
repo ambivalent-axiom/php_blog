@@ -68,5 +68,12 @@ function checkQuery($query) {
     }
 }
 
+function getUserLnFn() {
+    if(isset($_SESSION['id'])) {
+        echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
+    } else {
+        echo "Unregistered";
+    }
+}
 
 ?>

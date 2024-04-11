@@ -10,7 +10,7 @@
 
                         <h1 class="page-header">
                             Posts
-                            <small>John Smith</small>
+                            <small><?php getUserLnFn(); ?></small>
                         </h1>
                         <?php
                             if(isset($_GET["source"])) {
