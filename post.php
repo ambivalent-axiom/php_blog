@@ -27,16 +27,12 @@
                         $blog_post_image = $post['post_image'];
                         $blog_post_content = $post['post_content'];
                         echo "
-                            <h2>
-                                <a href='#'>
-                                    $blog_post_title
-                                </a>
-                            </h2>
-                            <p class='lead'>by
-                                <a href='index.php'>
-                                    $blog_post_author
-                                </a>
-                            </p>
+                            <h2>$blog_post_title</h2>
+                                <p class='lead'>by
+                                    <a href='index.php'>
+                                        $blog_post_author
+                                    </a>
+                                </p>
                             <p>
                                 <span class='glyphicon glyphicon-time'></span> Posted on $blog_post_date
                             </p>
@@ -45,10 +41,6 @@
                             <p>
                             $blog_post_content
                             </p>
-                            <a class='btn btn-primary' href='#'>Read More 
-                                <span class='glyphicon glyphicon-chevron-right'>
-                                </span>
-                            </a>
                             <hr>
                             ";
                     }

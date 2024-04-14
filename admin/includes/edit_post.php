@@ -73,7 +73,15 @@
 
     <div class="form-group">
         <label for="post_status">Post Status</label>
-        <input value="<?php if(isset($status)) { echo $status; } ?>" type="text" class="form-control" name="post_status">
+        <select name="post_status" id="">
+            <option value="<?php if(isset($status)) { echo $status; } ?>"><?php echo $status; ?></option>
+            <option value="<?php 
+                if($status === 'draft') {
+                    echo $stt = "published";
+                } else {
+                    echo $stt = 'draft';
+                } ?>"><?php echo $stt; ?></option>
+        </select>
     </div>
 
     <div class="form-group">
@@ -88,8 +96,8 @@
     </div>
 
     <div class="form-group">
-        <label for="post_content">Post Content</label>
-        <textarea class="form-control" name="post_content" id="" cols="30" rows="10"><?php if(isset($content)) { echo $content; } ?></textarea>
+        <label for="summernote">Post Content</label>
+        <textarea class="form-control" name="post_content" id="summernote" cols="30" rows="10"><?php if(isset($content)) { echo $content; } ?></textarea>
     </div>
 
     <div class="form-group">

@@ -31,7 +31,7 @@
             ?>  <tr>
                     <td><?php echo $id ?></td>
                     <td><?php echo $author ?></td>
-                    <td><?php echo $title ?></td>
+                    <td><a href="../post.php?p_id=<?php echo $id; ?>"><?php echo $title ?></a></td>
                     <td><?php 
                         $query = "SELECT cat_title FROM categories WHERE cat_id = {$cat} ";
                         $get_cat_name = mysqli_query($connection, $query);

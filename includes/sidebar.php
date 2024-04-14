@@ -27,8 +27,10 @@
             <?php 
                 if(isset($_GET['login'])) {
                     echo $_GET['login'];
-                } else {
+                } else if (isset($_SESSION['id'])) {
                     echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
+                } else {
+                    echo "";
                 }
             ?>
         </h4>

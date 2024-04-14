@@ -22,6 +22,8 @@
 
         checkQuery($update_post);
 
+        echo "User Created: " . "<a href='users.php'>View Users</a>";
+
     }
 
 ?>
