@@ -13,11 +13,11 @@
         $comments = $row['post_comment_count'];
         $date = $row['post_date'];
         $content = $row['post_content'];
+        $author_name = getAuthorByPost($author);
     }
 
     if(isset($_POST['update_post'])) {
         $post_title = $_POST['title'];
-        $post_author = $_POST['post_author'];
         $post_category_id = $_POST['post_category'];
         $post_status = $_POST['post_status'];
         $post_image = $_FILES['post_image']['name'];
@@ -30,7 +30,7 @@
         if(empty($post_image)) {
             $post_image = $image;
         }
-        echo $post_category_id;
+
         $query = "UPDATE posts SET post_title = '{$post_title}', post_category_id = {$post_category_id}, " .
                 "post_status = '{$post_status}', post_image = '{$post_image}', post_tags = '{$post_tags}', post_content = '{$post_content}' " .
                 "WHERE post_id = {$post_to_edit} ";
@@ -38,7 +38,7 @@
         $update_post = mysqli_query($connection, $query);
 
         checkQuery($update_post);
-        header("Location: posts.php");
+        header("Location: posts.php?notify=updated&p_id={$id}&p_title={$post_title}");
     }
 ?>
 
@@ -67,8 +67,7 @@
     </div>
 
     <div class="form-group">
-        <label for="post_author">Post Author</label>
-        <input value="<?php if(isset($author)) { echo $author; } ?>" type="text" class="form-control" name="post_author">
+        <label for="post_author">Post Author: <?php echo $author_name; ?></label>
     </div>
 
     <div class="form-group">

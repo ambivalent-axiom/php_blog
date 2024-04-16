@@ -16,35 +16,49 @@
                     if(isset($_GET['p_id'])) {
                         $post_id = $_GET['p_id'];
                     }
-
+                    
+                    //get the post
                     $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
                     $select_all_posts = mysqli_query($connection, $query);
-
                     while($post = mysqli_fetch_assoc($select_all_posts)) {
                         $blog_post_title = $post['post_title'];
                         $blog_post_author = $post['post_author'];
                         $blog_post_date = $post['post_date'];
                         $blog_post_image = $post['post_image'];
                         $blog_post_content = $post['post_content'];
-                        echo "
-                            <h2>$blog_post_title</h2>
-                                <p class='lead'>by
-                                    <a href='index.php'>
-                                        $blog_post_author
-                                    </a>
-                                </p>
-                            <p>
-                                <span class='glyphicon glyphicon-time'></span> Posted on $blog_post_date
-                            </p>
-                            <img class='img-responsive' src='images/$blog_post_image' alt=''>
-                            <hr>
-                            <p>
-                            $blog_post_content
-                            </p>
-                            <hr>
-                            ";
                     }
+
+                    //get the data on author
+                    $author_name = getAuthorByPost($blog_post_author);
                     ?>
+
+                    <!-- post the post -->
+                    <h2><?php echo $blog_post_title; ?></h2>
+                        <p class='lead'>by
+                            <a href='index.php'>
+                                <?php echo $author_name; ?>
+                            </a>
+                            
+                            <?php
+                                if(isset($_SESSION['id'])) {
+                                    if($_SESSION['role'] === 'admin') {
+                                        echo "<a href='admin/posts.php?source=edit&p_id={$post_id}&notify=edit'>[Edit Post]</a>";
+                                    } else if ($_SESSION['id'] === $blog_post_author) {
+                                        echo "<a href='admin/posts.php?source=edit&p_id={$post_id}&notify=edit'>[Edit Your Post]</a>";
+                                    }
+                                }
+                            ?>
+                        </p>
+                    <p>
+                        <span class='glyphicon glyphicon-time'></span> Posted on <?php echo $blog_post_date; ?>
+                    </p>
+                        <img class='img-responsive' src='images/<?php echo $blog_post_image; ?>' alt=''>
+                    <hr>
+                        <p>
+                            <?php echo $blog_post_content; ?>
+                        </p>
+                    <hr>
+
 
                 <!-- Blog Comments -->
 
@@ -52,31 +66,42 @@
 
                     <?php
                         if(isset($_POST['comment'])) {
-                            $com_auth = $_POST['name'];
-                            $com_email = $_POST['email'];
+                            
+                            if(isset($_SESSION['id'])) {
+                                $com_auth = $_SESSION['username'];
+                                $com_email = $_SESSION['email'];
+                            } else {
+                                $com_auth = $_POST['name'];
+                                $com_email = $_POST['email'];
+                            }
                             $comment = $_POST['com_content'];
 
-                            $query = "INSERT INTO comments (com_post_id, com_author, com_email, com_content, com_date) " .
-                                    "VALUES ({$post_id}, '{$com_auth}', '{$com_email}', '{$comment}', now()) ";
 
-                            $save_comm = mysqli_query($connection, $query);
-                            checkQuery($save_comm);
-
-                            $increment_com = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $post_id";
-                            $Update_com_count = mysqli_query($connection, $increment_com);
-                            checkQuery($increment_com);
+                            if(!empty($com_auth) && !empty($com_email) && !empty($comment)) {
+                                addComment($post_id, $com_auth, $com_email, $comment);
+                            } else {
+                                echo "<script>alert('Fields cannot be empty!')</script>";
+                            }
                         }
                     ?>
 
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="col-xs-6">
                             <label for="name">Name: </label>
-                            <input type="text" class="form-control" name="name">
+                            <input <?php 
+                                if(isset($_SESSION['id'])) {
+                                    echo "value={$_SESSION['username']}";
+                                }
+                                ?> type="text" class="form-control" name="name">
                         </div>
 
                         <div class="col-xs-6">
                             <label for="email">e-mail: </label>
-                            <input type="email" class="form-control" name="email">
+                            <input <?php 
+                                if(isset($_SESSION['id'])) {
+                                    echo "value={$_SESSION['email']}";
+                                }
+                                ?> type="email" class="form-control" name="email">
                         </div>
 
                         <div class="col-xs-12 margin-bottom-space">

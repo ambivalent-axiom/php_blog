@@ -47,18 +47,14 @@ function deleteCategory() {
     }
 }
 
-function deletePost() {
+function deletePost($post_to_delete) {
     global $connection;
-    if(isset($_GET['delete'])) {
-        $post_to_delete = $_GET['delete'];
-        $clear_com_quer = "DELETE FROM comments WHERE com_post_id = $post_to_delete ";
-        $query = "DELETE FROM posts WHERE post_id = {$post_to_delete} ";
-        $clear_comments = mysqli_query($connection, $clear_com_quer);
-        checkQuery($clear_comments);
-        $execure_query = mysqli_query($connection, $query);
-        checkQuery($execure_query);
-        header("Location: posts.php");
-    }
+    $clear_com_quer = "DELETE FROM comments WHERE com_post_id = $post_to_delete ";
+    $query = "DELETE FROM posts WHERE post_id = {$post_to_delete} ";
+    $clear_comments = mysqli_query($connection, $clear_com_quer);
+    checkQuery($clear_comments);
+    $execure_query = mysqli_query($connection, $query);
+    checkQuery($execure_query);
 }
 
 function checkQuery($query) {
@@ -76,4 +72,36 @@ function getUserLnFn() {
     }
 }
 
+function getAuthorByPost($author) {
+    global $connection;
+    $query = "SELECT * FROM users WHERE user_id = $author ";
+    $select_author = mysqli_query($connection, $query);
+    while($author = mysqli_fetch_assoc($select_author)) {
+        return($author['user_name']);
+    }
+}
+
+function publishPost($post_id) {
+    global $connection;
+    $query = "UPDATE posts SET post_status = 'published' WHERE 	post_id = {$post_id} ";
+    $publish = mysqli_query($connection, $query);
+    checkQuery($publish); 
+}
+
+function draftPost($post_id) {
+    global $connection;
+    $query = "UPDATE posts SET post_status = 'draft' WHERE 	post_id = {$post_id} ";
+    $draft = mysqli_query($connection, $query);
+    checkQuery($draft);
+}
+
+function addComment($post_id, $com_auth, $com_email, $comment) {
+    $query = "INSERT INTO comments (com_post_id, com_author, com_email, com_content, com_date) " .
+    "VALUES ({$post_id}, '{$com_auth}', '{$com_email}', '{$comment}', now()) ";
+    $save_comm = mysqli_query($connection, $query);
+    checkQuery($save_comm);
+    $increment_com = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $post_id";
+    $Update_com_count = mysqli_query($connection, $increment_com);
+    checkQuery($increment_com);
+}
 ?>

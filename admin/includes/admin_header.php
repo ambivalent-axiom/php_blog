@@ -4,15 +4,14 @@
 <?php session_start(); ?>
 
 <?php
-
 if(!isset($_SESSION['role'])) {
     header("Location: ../index.php");
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
 
@@ -29,6 +28,9 @@ if(!isset($_SESSION['role'])) {
 
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
+
+    <!-- ambax custom css -->
+    <link rel="stylesheet" href="css/custom.css">
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">

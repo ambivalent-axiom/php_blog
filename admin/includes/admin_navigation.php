@@ -38,7 +38,7 @@
                                 <a href="posts.php">View All posts</a>
                             </li>
                             <li>
-                                <a href="posts.php?source=add_post">Add posts</a>
+                                <a href="posts.php?source=add_post&notify=add">Add posts</a>
                             </li>
                         </ul>
                     </li>

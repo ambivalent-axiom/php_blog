@@ -11,6 +11,7 @@ body {
     background-color: #222;
 }
 
+
 @media(min-width:768px) {
     body {
         margin-top: 50px;

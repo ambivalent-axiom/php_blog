@@ -33,6 +33,8 @@
                         $blog_post_date = $post['post_date'];
                         $blog_post_image = $post['post_image'];
                         $blog_post_content = substr($post['post_content'], 0, 100);
+                        $author_name = getAuthorByPost($blog_post_author);
+
                         echo "
                             <h2>
                                 <a href='post.php?p_id={$blog_post_id}'>
@@ -41,7 +43,7 @@
                             </h2>
                             <p class='lead'>by
                                 <a href='index.php'>
-                                    $blog_post_author
+                                    $author_name
                                 </a>
                             </p>
                             <p>

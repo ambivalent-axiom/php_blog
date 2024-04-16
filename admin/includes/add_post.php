@@ -3,7 +3,7 @@
 
     if(isset($_POST['create_post'])) {
         $post_title = $_POST['title'];
-        $post_author = $_POST['post_author'];
+        $post_author = $_SESSION['id'];
         $post_category_id = $_POST['post_category_id'];
 
         $post_image = $_FILES['post_image']['name'];
@@ -12,7 +12,6 @@
         $post_tags = $_POST['post_tags'];
         $post_content = $_POST['post_content'];
         $post_date = date('d-m-y');
-        //$post_comment_count = 4;
 
         move_uploaded_file($post_image_temp, "../images/$post_image");
 
@@ -20,9 +19,10 @@
                 "VALUES (NULL, '{$post_category_id}', '{$post_title}', '{$post_author}', '{$post_date}', '{$post_image}', '{$post_content}', '{$post_tags}', 'draft')";
 
         $update_post = mysqli_query($connection, $query);
-
         checkQuery($update_post);
+        $post_id = mysqli_insert_id($connection);
 
+        header("Location: posts.php?notify=created&p_title={$post_title}&p_id={$post_id}");
     }
 
 ?>
@@ -49,11 +49,6 @@
                 }
             ?>
         </select>
-    </div>
-
-    <div class="form-group">
-        <label for="post_author">Post Author</label>
-        <input type="text" class="form-control" name="post_author">
     </div>
 
     <div class="form-group">
