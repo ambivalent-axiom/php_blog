@@ -86,7 +86,11 @@ if(isset($_POST['checkBoxArray'])) {
                         <td><?php echo $tags ?></td>
                         <td><?php echo $comments ?></td>
                         <td><?php echo $date ?></td>
-                        <td><a href="?source=delete&p_id=<?php echo $id ?>">Delete</a> | 
+                        <td><a onclick="javascript: 
+                                return confirm('You are about to permanently delete the post!')
+                                ;" 
+                                href="?source=delete&p_id=<?php echo $id ?>">Delete
+                            </a> | 
                             <a href="?source=edit&p_id=<?php echo $id ?>&notify=edit">Edit</a> | 
                             <a href="?source=pub&p_id=<?php echo $id ?>">Publish</a> | 
                             <a href="?source=draft&p_id=<?php echo $id ?>">Draft</a>

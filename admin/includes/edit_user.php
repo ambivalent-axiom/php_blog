@@ -14,7 +14,12 @@
 
     if(isset($_POST['update_user'])) {
         $user_name = $_POST['username'];
-        $user_pass = $_POST['pass'];
+        if($pass === $_POST['pass']) {
+            $user_pass = $_POST['pass'];
+        } else {
+            $user_pass = crypt($_POST['pass'], $pass);
+        }
+        
         $user_fname = $_POST['fname'];
         $user_lname = $_POST['lname'];
         $user_email = $_POST['email'];

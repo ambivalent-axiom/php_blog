@@ -96,6 +96,7 @@ function draftPost($post_id) {
 }
 
 function addComment($post_id, $com_auth, $com_email, $comment) {
+    global $connection;
     $query = "INSERT INTO comments (com_post_id, com_author, com_email, com_content, com_date) " .
     "VALUES ({$post_id}, '{$com_auth}', '{$com_email}', '{$comment}', now()) ";
     $save_comm = mysqli_query($connection, $query);
@@ -103,5 +104,27 @@ function addComment($post_id, $com_auth, $com_email, $comment) {
     $increment_com = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $post_id";
     $Update_com_count = mysqli_query($connection, $increment_com);
     checkQuery($increment_com);
+}
+
+function checkIfExists($column, $value) {
+    global $connection;
+    $query = "SELECT * FROM users WHERE {$column} = '{$value}' ";
+    $exec_query = mysqli_query($connection, $query);
+    checkQuery($exec_query);
+    if(mysqli_num_rows($exec_query) == 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function encryptPass($pass) {
+    global $connection;
+    $query = "SELECT randSalt FROM users";
+    $select_randsalt = mysqli_query($connection, $query);
+    checkQuery($select_randsalt);
+    $row = mysqli_fetch_array($select_randsalt);
+    $salt = $row['randSalt'];
+    return $encrypted_pass = crypt($pass, $salt); 
 }
 ?>

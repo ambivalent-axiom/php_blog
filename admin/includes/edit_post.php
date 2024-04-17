@@ -45,13 +45,17 @@
 <form action="" method="post" enctype="multipart/form-data">
 
     <div class="form-group">
+        <label for="post_author">Post Author: <?php echo $author_name; ?></label>
+    </div>
+
+    <div class="form-group">
         <label for="title">Post Title</label>
         <input value="<?php if(isset($title)) { echo $title; } ?>" type="text" class="form-control" name="title">
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-xs-6">
         <label for="post_category">Post Category:</label>
-        <select name="post_category" id="">
+        <select class="form-control" name="post_category" id="">
             <?php
                 $query = "SELECT * FROM categories ";
                 $select_categories_all = mysqli_query($connection, $query);
@@ -66,13 +70,9 @@
         </select>
     </div>
 
-    <div class="form-group">
-        <label for="post_author">Post Author: <?php echo $author_name; ?></label>
-    </div>
-
-    <div class="form-group">
+    <div class="form-group col-xs-6">
         <label for="post_status">Post Status</label>
-        <select name="post_status" id="">
+        <select class="form-control" name="post_status" id="">
             <option value="<?php if(isset($status)) { echo $status; } ?>"><?php echo $status; ?></option>
             <option value="<?php 
                 if($status === 'draft') {

@@ -12,7 +12,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">Start</a>
+                <a class="navbar-brand glyphicon glyphicon-book" href="index.php"></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -31,7 +31,10 @@
                 <?php
                     if(isset($_SESSION['role'])) {
                         echo "<ul class='nav navbar-nav navbar-right'>
-                                <li><a href='admin'>Admin</a></li></ul>";
+                                <li><a href='admin'>{$_SESSION['username']}</a></li></ul>";
+                    } else {
+                        echo "<ul class='nav navbar-nav navbar-right'>
+                                <li><a href='registration.php'>Register</a></li></ul>";
                     }
                 ?>
             </div>

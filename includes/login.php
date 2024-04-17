@@ -27,8 +27,9 @@ if(isset($_POST['login'])) {
         $user_email = $row['user_email'];
         $user_image = $row['user_image'];
         $user_role = $row['user_role'];
-
     }
+
+    $password = crypt($password, $user_pass);
 
     if($user_nm === $username && $user_pass === $password) {
         $_SESSION['username'] = $user_nm;
