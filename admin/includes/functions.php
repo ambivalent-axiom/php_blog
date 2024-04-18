@@ -72,12 +72,22 @@ function getUserLnFn() {
     }
 }
 
-function getAuthorByPost($author) {
+function getAuthorByPost($author, $column='user_name') {
     global $connection;
     $query = "SELECT * FROM users WHERE user_id = $author ";
     $select_author = mysqli_query($connection, $query);
-    while($author = mysqli_fetch_assoc($select_author)) {
-        return($author['user_name']);
+    switch($column) {
+        case 'image';
+            while($author = mysqli_fetch_assoc($select_author)) {
+                return($author['user_image']);
+            }
+        break;
+
+        default:
+            while($author = mysqli_fetch_assoc($select_author)) {
+                return($author['user_name']);
+            }
+        break;
     }
 }
 
@@ -106,16 +116,40 @@ function addComment($post_id, $com_auth, $com_email, $comment) {
     checkQuery($increment_com);
 }
 
-function checkIfExists($column, $value) {
+function checkIfExists($column, $value, $operation='check') {
     global $connection;
     $query = "SELECT * FROM users WHERE {$column} = '{$value}' ";
     $exec_query = mysqli_query($connection, $query);
     checkQuery($exec_query);
-    if(mysqli_num_rows($exec_query) == 0) {
-        return false;
-    } else {
-        return true;
+    switch($operation) {
+        case 'check';
+            if(mysqli_num_rows($exec_query) == 0) {
+                return false;
+            } else {
+                return true;
+            };
+        break;
+
+        case 'get_id';
+            if(mysqli_num_rows($exec_query) >= 1) {
+                while($user = mysqli_fetch_assoc($exec_query)) {
+                    $user_id = $user['user_id'];
+                    return $user_id;
+                }
+            } else {
+                return false;
+            };
+        break;
+
+        default:
+            if(mysqli_num_rows($exec_query) == 0) {
+                return false;
+            } else {
+                return true;
+            };
+        break;
     }
+
 }
 
 function encryptPass($pass) {
@@ -126,5 +160,34 @@ function encryptPass($pass) {
     $row = mysqli_fetch_array($select_randsalt);
     $salt = $row['randSalt'];
     return $encrypted_pass = crypt($pass, $salt); 
+}
+
+function getAllPosts($access) {
+    global $connection;
+    if($access === 'admin') {
+        $query = "SELECT * FROM posts ";
+        $all_posts = mysqli_query($connection, $query);
+        return $all_posts;
+    } else {
+        $query = "SELECT * FROM posts WHERE post_author = {$access} ";
+        $all_posts = mysqli_query($connection, $query);
+        return $all_posts;
+    }
+}
+
+function getCommentCountByUser($email) {
+    global $connection;
+    $query = "SELECT * FROM comments WHERE com_email = '{$email}' ";
+    $get_comments = mysqli_query($connection, $query);
+    checkQuery($get_comments);
+    return mysqli_num_rows($get_comments);
+}
+
+function getPostCountByUser($user_id) {
+    global $connection;
+    $query = "SELECT * FROM posts WHERE post_author= '{$user_id}' ";
+    $get_posts = mysqli_query($connection, $query);
+    checkQuery($get_posts);
+    return mysqli_num_rows($get_posts);
 }
 ?>

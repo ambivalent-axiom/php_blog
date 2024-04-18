@@ -70,11 +70,12 @@ figure{
     margin:1em 40px
 }
 hr{
-    color: #000;
     height:0;
     -webkit-box-sizing:content-box;
     -moz-box-sizing:content-box;
-    box-sizing:content-box
+    box-sizing:content-box;
+    border-top:1px solid #fff;
+    border-bottom: 1px solid #461c8821;
 }
 pre{
     overflow:auto
@@ -1076,7 +1077,7 @@ hr{
     margin-top:20px;
     margin-bottom:20px;
     border:0;
-    border-top:1px solid #eee
+    border-top:1px solid #fff;
 }
 .sr-only{
     position:absolute;
@@ -2669,7 +2670,7 @@ select[multiple].form-group-lg .form-control,textarea.form-group-lg .form-contro
 .btn-primary{
     color:#fff;
     background-color:#554c66;
-    border-color:#554c66
+    border-color:#554c66;
 }
 .btn-primary.active,.btn-primary.focus,.btn-primary:active,.btn-primary:focus,.btn-primary:hover,.open>.dropdown-toggle.btn-primary{
     color:#fff;

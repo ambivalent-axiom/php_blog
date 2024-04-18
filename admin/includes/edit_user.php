@@ -8,7 +8,7 @@
         $firstnm = $row['user_fn'];
         $lastnm = $row['user_ln'];
         $email = $row['user_email'];
-        //$image = $row['user_image'];
+        $image = $row['user_image'];
         $role = $row['user_role'];
     }
 
@@ -23,9 +23,8 @@
         $user_fname = $_POST['fname'];
         $user_lname = $_POST['lname'];
         $user_email = $_POST['email'];
-
-        // $user_image = $_FILES['user_image']['name'];
-        // $user_image_temp = $_FILES['user_image']['tmp_name'];
+        $user_image = $_FILES['user_image']['name'];
+        $user_image_temp = $_FILES['user_image']['tmp_name'];
 
         if(isset($_POST['user_role'])) {
             $user_role = $_POST['user_role'];
@@ -33,10 +32,10 @@
             $user_role = $role;
         }
 
-        // move_uploaded_file($post_image_temp, "../images/user/$post_image");
+        move_uploaded_file($user_image_temp, "../images/user/$user_image");
         
         $query = "UPDATE users SET user_name = '{$user_name}', user_pass = '{$user_pass}', " .
-                "user_fn = '{$user_fname}', user_ln = '{$user_lname}', user_email = '{$user_email}', user_role = '{$user_role}' " .
+                "user_fn = '{$user_fname}', user_ln = '{$user_lname}', user_email = '{$user_email}', user_image = '{$user_image}', user_role = '{$user_role}' " .
                 "WHERE user_id = {$user_to_edit} ";
 
         $update_post = mysqli_query($connection, $query);
@@ -73,10 +72,14 @@
         <input value="<?php if(isset($email)) { echo $email; } ?>" type="email" class="form-control" name="email">
     </div>
 
-    <!--<div class="form-group">
-        <label for="user_image">Image</label>
-        <input type="file" name="user_image">
-    </div>-->
+    <div class="form-group">
+        <img class="input-lg pull-left" src="/cms/images/user/<?php echo $image ?>" alt="">
+        <div class="figure">
+            <label for="user_image">Image</label>
+            <input type="file" name="user_image">
+        </div>
+    </div>
+
     <?php
         if($_SESSION['role'] === 'admin') {
             ?>
@@ -96,7 +99,6 @@
             <?php
         } 
     ?>
-
 
     <div class="form-group">
         <button type="submit" name="update_user" class="btn btn-primary">Update User</button>

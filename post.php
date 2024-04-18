@@ -1,35 +1,32 @@
 <?php include "includes/header.php" ?>
-
 <body>
     <!-- Navigation -->
     <?php include "includes/navigation.php" ?>
     <!-- Page Content -->
     <div class="container">
         <div class="row">
-
             <!-- Blog Entries Column -->
                     <?php include "includes/db.php" ?>
                     <div class="col-md-8">
-
                     <!-- First Blog Post -->
                     <?php
-                    if(isset($_GET['p_id'])) {
-                        $post_id = $_GET['p_id'];
-                    }
+                        if(isset($_GET['p_id'])) {
+                            $post_id = $_GET['p_id'];
+                        }
                     
-                    //get the post
-                    $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
-                    $select_all_posts = mysqli_query($connection, $query);
-                    while($post = mysqli_fetch_assoc($select_all_posts)) {
-                        $blog_post_title = $post['post_title'];
-                        $blog_post_author = $post['post_author'];
-                        $blog_post_date = $post['post_date'];
-                        $blog_post_image = $post['post_image'];
-                        $blog_post_content = $post['post_content'];
-                    }
+                        //get the post
+                        $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+                        $select_all_posts = mysqli_query($connection, $query);
+                        while($post = mysqli_fetch_assoc($select_all_posts)) {
+                            $blog_post_title = $post['post_title'];
+                            $blog_post_author = $post['post_author'];
+                            $blog_post_date = $post['post_date'];
+                            $blog_post_image = $post['post_image'];
+                            $blog_post_content = $post['post_content'];
+                        }
 
-                    //get the data on author
-                    $author_name = getAuthorByPost($blog_post_author);
+                        //get the data on author
+                        $author_name = getAuthorByPost($blog_post_author);
                     ?>
 
                     <!-- post the post -->
@@ -38,7 +35,6 @@
                             <a href='index.php'>
                                 <?php echo $author_name; ?>
                             </a>
-                            
                             <?php
                                 if(isset($_SESSION['id'])) {
                                     if($_SESSION['role'] === 'admin') {
@@ -59,9 +55,7 @@
                         </p>
                     <hr>
 
-
                 <!-- Blog Comments -->
-
                 <!-- Comments Form -->
 
                     <?php
@@ -117,7 +111,6 @@
                 <hr>
 
                 <!-- Posted Comments -->
-
                 <!-- Comment -->
                 <?php
                     $query = "SELECT * FROM comments WHERE com_status = 'Approved' AND com_post_id = $post_id ORDER BY com_id DESC ";
@@ -129,18 +122,24 @@
                         $email = $comment['com_email'];
                         $date = $comment['com_date'];
                         $content = $comment['com_content'];
+                        $user = checkIfExists('user_email', $email, 'get_id');
 
-                        ?>
+                        if(!empty($user)) {
+                            $image = getAuthorByPost($user, 'image');
+                        }
+                    ?>
                         <div class="media">
+                            <img class="media-object pull-left" src="/cms/images/user/user.png" alt="" height='40'>
+
                             <div class="media-body">
                                 <h4 class="media-heading"><?php echo $author ?>
                                     <small><?php echo $date ?></small>
                                     <small><?php echo $email ?></small>
                                 </h4>
                                     <?php echo $content ?>
-                                </div>
                             </div>
-                        <?php
+                        </div>
+                    <?php
                     }
                 ?>
 

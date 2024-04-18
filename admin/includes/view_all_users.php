@@ -27,7 +27,8 @@
                     <td><?php echo $name ?></td>
                     <td><?php echo $firstnm . " " . $lastnm ?></td>
                     <td><?php echo $email ?></td>
-                    <td><?php echo $image ?></td>
+                    
+                    <td><img src="/cms/images/user/<?php echo $image ?>" alt="" height="40"></td>
                     <td><?php echo $role ?></td>
                     <td><a href="?source=edit&u_id=<?php echo $id ?>">Edit</a> | 
                         <a href="?source=del&u_id=<?php echo $id ?>">Delete</a>

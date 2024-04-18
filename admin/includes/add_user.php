@@ -7,14 +7,15 @@
         $user_fname = $_POST['fname'];
         $user_lname = $_POST['lname'];
         $user_email = $_POST['email'];
-        // $user_image = $_FILES['user_image']['name'];
-        // $user_image_temp = $_FILES['user_image']['tmp_name'];
-
         $user_role = $_POST['user_role'];
+        $user_image = $_FILES['user_image']['name'];
+        $user_image_temp = $_FILES['user_image']['tmp_name'];
+        move_uploaded_file($user_image_temp, "../images/user/$user_image");
+        
 
-        // move_uploaded_file($post_image_temp, "../images/user/$post_image");
-        $query = "INSERT INTO users (user_name, user_pass, user_fn, user_ln, user_email, user_role) " . 
-                "VALUES ('{$user_name}', '{$user_pass}', '{$user_fname}', '{$user_lname}', '{$user_email}', '{$user_role}') ";
+        
+        $query = "INSERT INTO users (user_name, user_pass, user_fn, user_ln, user_email, user_image, user_role) " . 
+                "VALUES ('{$user_name}', '{$user_pass}', '{$user_fname}', '{$user_lname}', '{$user_email}', '{$user_image}', '{$user_role}') ";
         $update_post = mysqli_query($connection, $query);
         checkQuery($update_post);
 
@@ -51,10 +52,10 @@
         <input type="email" class="form-control" name="email">
     </div>
 
-    <!--<div class="form-group">
+    <div class="form-group">
         <label for="user_image">Image</label>
         <input type="file" name="user_image">
-    </div>-->
+    </div>
 
     <div class="form-group">
         <label for="user_role">Role</label>

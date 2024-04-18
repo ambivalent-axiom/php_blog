@@ -26,8 +26,6 @@
                     </ul>
                 </li>
             </ul>
-
-
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
@@ -58,13 +56,12 @@
                                             <a href='users.php?source=add_user'>Add User</a>
                                         </li>
                                     </ul>
+                                </li>
+                                <li>
+                                    <a href='comments.php'><i class='fa fa-fw fa-comments'></i> Comments</a>
                                 </li>";
                         }
                     ?>
-
-                    <li>
-                        <a href="comments.php"><i class="fa fa-fw fa-comments"></i> Comments</a>
-                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
