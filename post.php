@@ -12,6 +12,7 @@
                     <?php
                         if(isset($_GET['p_id'])) {
                             $post_id = $_GET['p_id'];
+                            postViewed($post_id);
                         }
                     
                         //get the post
@@ -23,6 +24,7 @@
                             $blog_post_date = $post['post_date'];
                             $blog_post_image = $post['post_image'];
                             $blog_post_content = $post['post_content'];
+                            $blog_post_views = $post['post_views'];
                         }
 
                         //get the data on author
@@ -46,7 +48,7 @@
                             ?>
                         </p>
                     <p>
-                        <span class='glyphicon glyphicon-time'></span> Posted on <?php echo $blog_post_date; ?>
+                        <span class='glyphicon glyphicon-time'></span> Posted on <?php echo $blog_post_date; ?> Views: <?php echo $blog_post_views; ?>
                     </p>
                         <img class='img-responsive' src='images/<?php echo $blog_post_image; ?>' alt=''>
                     <hr>
@@ -60,7 +62,7 @@
 
                     <?php
                         if(isset($_POST['comment'])) {
-                            
+
                             if(isset($_SESSION['id'])) {
                                 $com_auth = $_SESSION['username'];
                                 $com_email = $_SESSION['email'];
@@ -70,9 +72,10 @@
                             }
                             $comment = $_POST['com_content'];
 
-
                             if(!empty($com_auth) && !empty($com_email) && !empty($comment)) {
                                 addComment($post_id, $com_auth, $com_email, $comment);
+                                //header("location: post.php?p_id=$post_id");
+                                //exit;
                             } else {
                                 echo "<script>alert('Fields cannot be empty!')</script>";
                             }
@@ -88,7 +91,6 @@
                                 }
                                 ?> type="text" class="form-control" name="name">
                         </div>
-
                         <div class="col-xs-6">
                             <label for="email">e-mail: </label>
                             <input <?php 
@@ -97,7 +99,6 @@
                                 }
                                 ?> type="email" class="form-control" name="email">
                         </div>
-
                         <div class="col-xs-12 margin-bottom-space">
                             <label for="com_content">Leave a comment: </label>
                             <textarea class="form-control" name="com_content" rows="5"></textarea>

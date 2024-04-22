@@ -1,21 +1,26 @@
-
-
 <?php
 if(isset($_POST['checkBoxArray'])) {
     foreach($_POST['checkBoxArray'] as $post_id) {
         $bulk_option = $_POST['bulk_options'];
         switch($bulk_option) {
-            case 'publish';
+            case 'publish':
                 publishPost($post_id);
             break;
 
-            case 'draft';
+            case 'draft':
                 draftPost($post_id);
             break;
 
-            case 'delete';
+            case 'delete':
                 deletePost($post_id);
             break;
+
+            case 'clone':
+                clonePost($post_id);
+            break;
+
+            case 'reset_views':
+                resetViews($post_id);
         }
     }
     header("Location: posts.php?notify=bulk");
@@ -29,7 +34,10 @@ if(isset($_POST['checkBoxArray'])) {
                 <option value="">Select Options</option>
                 <option value="publish">Publish</option>
                 <option value="draft">Draft</option>
+                <option value="clone">Clone</option>
+                <option value="reset_views">Reset Views</option>
                 <option value="delete">Delete</option>
+
             </select>
         </div>
 
@@ -49,6 +57,7 @@ if(isset($_POST['checkBoxArray'])) {
                 <th>Image</th>
                 <th>Tags</th>
                 <th>Comments</th>
+                <th>Views</th>
                 <th>Date</th>
                 <th>Action</th>
             </tr>
@@ -72,6 +81,7 @@ if(isset($_POST['checkBoxArray'])) {
                     $comments = $row['post_comment_count'];
                     $date = $row['post_date'];
                     $author_name = getAuthorByPost($author);
+                    $post_views = $row['post_views'];
                     ?>  <tr>
                             <td><input class="checkBoxes" type="checkbox" name="checkBoxArray[]" value="<?php echo $id; ?>"></td>
                             <td><?php echo $id ?></td>
@@ -88,6 +98,7 @@ if(isset($_POST['checkBoxArray'])) {
                             <td><img src='../images/<?php echo $image ?>' alt='image' style="width:100px;height:50px;"></td>
                             <td><?php echo $tags ?></td>
                             <td><?php echo $comments ?></td>
+                            <td><?php echo $post_views ?></td>
                             <td><?php echo $date ?></td>
                             <td><a onclick="javascript: 
                                     return confirm('You are about to permanently delete the post!')
@@ -96,7 +107,11 @@ if(isset($_POST['checkBoxArray'])) {
                                 </a> | 
                                 <a href="?source=edit&p_id=<?php echo $id ?>&notify=edit">Edit</a> | 
                                 <a href="?source=pub&p_id=<?php echo $id ?>">Publish</a> | 
-                                <a href="?source=draft&p_id=<?php echo $id ?>">Draft</a>
+                                <a href="?source=draft&p_id=<?php echo $id ?>">Draft</a> |
+                                <a onclick="javascript:
+                                    return confirm('You are about to reset the post view counter!')
+                                    ;"
+                                   href="?source=reset_views&p_id=<?php echo $id ?>">Reset Views</a>
                             </td>
                         </tr>
                     <?php

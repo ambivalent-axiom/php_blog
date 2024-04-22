@@ -1,5 +1,4 @@
 <?php
-
 function insert_categories() {
     global $connection;
 
@@ -17,7 +16,6 @@ function insert_categories() {
     
     } 
 }
-
 function findAllCategories() {
     global $connection;
     $query = "SELECT * FROM categories ";
@@ -36,7 +34,6 @@ function findAllCategories() {
 
 
 }
-
 function deleteCategory() {
     global $connection;
     if(isset($_GET['delete'])) {
@@ -46,7 +43,6 @@ function deleteCategory() {
         header("Location: categories.php");
     }
 }
-
 function deletePost($post_to_delete) {
     global $connection;
     $clear_com_quer = "DELETE FROM comments WHERE com_post_id = $post_to_delete ";
@@ -56,14 +52,12 @@ function deletePost($post_to_delete) {
     $execure_query = mysqli_query($connection, $query);
     checkQuery($execure_query);
 }
-
 function checkQuery($query) {
     global $connection;
     if(!$query) {
         die("Query Failed: " . mysqli_error($connection));
     }
 }
-
 function getUserLnFn() {
     if(isset($_SESSION['id'])) {
         echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
@@ -71,7 +65,6 @@ function getUserLnFn() {
         echo "Unregistered";
     }
 }
-
 function getAuthorByPost($author, $column='user_name') {
     global $connection;
     $query = "SELECT * FROM users WHERE user_id = $author ";
@@ -90,21 +83,18 @@ function getAuthorByPost($author, $column='user_name') {
         break;
     }
 }
-
 function publishPost($post_id) {
     global $connection;
     $query = "UPDATE posts SET post_status = 'published' WHERE 	post_id = {$post_id} ";
     $publish = mysqli_query($connection, $query);
     checkQuery($publish); 
 }
-
 function draftPost($post_id) {
     global $connection;
     $query = "UPDATE posts SET post_status = 'draft' WHERE 	post_id = {$post_id} ";
     $draft = mysqli_query($connection, $query);
     checkQuery($draft);
 }
-
 function addComment($post_id, $com_auth, $com_email, $comment) {
     global $connection;
     $query = "INSERT INTO comments (com_post_id, com_author, com_email, com_content, com_date) " .
@@ -113,9 +103,8 @@ function addComment($post_id, $com_auth, $com_email, $comment) {
     checkQuery($save_comm);
     $increment_com = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $post_id";
     $Update_com_count = mysqli_query($connection, $increment_com);
-    checkQuery($increment_com);
+    checkQuery($Update_com_count);
 }
-
 function checkIfExists($column, $value, $operation='check') {
     global $connection;
     $query = "SELECT * FROM users WHERE {$column} = '{$value}' ";
@@ -151,13 +140,11 @@ function checkIfExists($column, $value, $operation='check') {
     }
 
 }
-
 function encryptPass($pass) {
     $salt = addSalt();
     $encrypted_pass = crypt($pass, $salt);
     return $encrypted_pass;
 }
-
 function getAllPosts($access) {
     global $connection;
     if($access === 'admin') {
@@ -170,7 +157,6 @@ function getAllPosts($access) {
         return $all_posts;
     }
 }
-
 function getCommentCountByUser($email) {
     global $connection;
     $query = "SELECT * FROM comments WHERE com_email = '{$email}' ";
@@ -178,7 +164,6 @@ function getCommentCountByUser($email) {
     checkQuery($get_comments);
     return mysqli_num_rows($get_comments);
 }
-
 function getPostCountByUser($user_id) {
     global $connection;
     $query = "SELECT * FROM posts WHERE post_author= '{$user_id}' ";
@@ -186,7 +171,6 @@ function getPostCountByUser($user_id) {
     checkQuery($get_posts);
     return mysqli_num_rows($get_posts);
 }
-
 function addSalt() {
     $charString = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     $salt = "";
@@ -195,5 +179,75 @@ function addSalt() {
         $salt = $salt . $charString[$index];
     }
     return "$1$" . $salt;
+}
+function getPosts($sql) {
+    while($post = mysqli_fetch_assoc($sql)) {
+        $blog_post_id = $post['post_id'];
+        $blog_post_title = $post['post_title'];
+        $blog_post_author = $post['post_author'];
+        $blog_post_date = $post['post_date'];
+        $blog_post_image = $post['post_image'];
+        $blog_post_content = $post['post_content'];
+        $author_name = getAuthorByPost($blog_post_author);
+        ?>
+        <h2>
+            <a href='post.php?p_id=<?php echo $blog_post_id; ?>'>
+                <?php echo $blog_post_title ?>
+            </a>
+        </h2>
+        <p class='lead'>by
+            <a href='user.php?u_id=<?php echo $blog_post_author ?>'>
+                <?php echo $author_name ?>
+            </a>
+        </p>
+        <p>
+            <span class='glyphicon glyphicon-time'></span> Posted on <?php echo $blog_post_date ?>
+        </p>
+        <a href='post.php?p_id=<?php echo $blog_post_id ?>'>
+            <img class='img-responsive' src='images/<?php echo $blog_post_image ?>' alt=''>
+        </a>
+        <hr>
+        <p>
+            <?php
+            $clean_post_cont = strip_tags($blog_post_content);
+            echo substr($clean_post_cont, 0, 100);
+            ?>...
+        </p>
+        <a class='btn btn-primary' href='post.php?p_id=<?php echo $blog_post_id ?>'>Read More
+            <span class='glyphicon glyphicon-chevron-right'></span>
+        </a>
+        <hr>
+        <?php
+    }
+}
+function clonePost($post_id) {
+    global $connection;
+    $query = "SELECT * FROM posts WHERE post_id = $post_id ";
+    $select_post_query = mysqli_query($connection, $query);
+    checkQuery($select_post_query);
+    while($post = mysqli_fetch_assoc($select_post_query)) {
+        $post_title = $post['post_title'];
+        $post_author = $post['post_author'];
+        $post_date = date('d-m-y');
+        $post_image = $post['post_image'];
+        $post_content = $post['post_content'];
+        $post_category_id = $post['post_category_id'];
+        $post_tags = $post['post_tags'];
+    }
+    $query = "INSERT INTO posts(post_category_id, post_title, post_author, post_date, post_image, post_content, post_status, post_tags) VALUES({$post_category_id}, '{$post_title}', {$post_author}, '{$post_date}', '{$post_image}', '{$post_content}', 'draft', '{$post_tags}') ";
+    $clone_post = mysqli_query($connection, $query);
+    checkQuery($clone_post);
+}
+function postViewed($post_id) {
+    global $connection;
+    $query = "UPDATE posts SET post_views = post_views + 1 WHERE post_id = $post_id ";
+    $update_views = mysqli_query($connection, $query);
+    checkQuery($update_views);
+}
+function resetViews($post_id) {
+    global $connection;
+    $query = "UPDATE posts SET post_views = 0 WHERE post_id = $post_id ";
+    $update_views = mysqli_query($connection, $query);
+    checkQuery($update_views);
 }
 ?>

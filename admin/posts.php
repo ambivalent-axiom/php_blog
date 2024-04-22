@@ -20,40 +20,44 @@
                                     $notify_about = "";
                                 }
                                 switch($notify_about) {
-                                    case 'bulk';
+                                    case 'bulk':
                                     echo "<small>Bulk operation performed at: " . date('Y-m-d H:i:s', time()) . "</small>";
                                     break;
 
-                                    case 'edit';
+                                    case 'edit':
                                     echo "<small>Post edit</small>";
                                     break;
 
-                                    case 'add';
+                                    case 'add':
                                     echo "<small>Add new post</small>";
                                     break;
 
-                                    case 'updated';
+                                    case 'updated':
                                     echo "<small class='bg-success'>Post " . 
                                         "<a href='../post.php?p_id={$_GET['p_id']}'>{$_GET['p_title']}</a>" . 
                                         " has been updated.</small>";
                                     break;
 
-                                    case 'created';
+                                    case 'created':
                                     echo "<small class='bg-success'>Post " . 
                                         "<a href='../post.php?p_id={$_GET['p_id']}'>{$_GET['p_title']}</a>" . 
                                         " has been created.</small>";
                                     break;
 
-                                    case 'deleted';
+                                    case 'deleted':
                                     echo "<small class='bg-success'>Post ID {$_GET['p_id']} has been removed from database.</small>";
                                     break;
 
-                                    case 'published';
+                                    case 'published':
                                     echo "<small class='bg-success'>Post ID {$_GET['p_id']} has been moved to published.</small>";
                                     break;
 
-                                    case 'drafted';
+                                    case 'drafted':
                                     echo "<small class='bg-success'>Post ID {$_GET['p_id']} has been moved to draft.</small>";
+                                    break;
+
+                                    case 'reset_views':
+                                        echo "<small class='bg-success'>Post ID {$_GET['p_id']} views counter reset.</small>";
                                     break;
 
                                     default:
@@ -82,27 +86,32 @@
                         
                             switch($source) {
 
-                                case 'delete';
+                                case 'delete':
                                     deletePost($post_id);
                                     header("Location: posts.php?notify=deleted&p_id={$post_id}");
                                 break;
                                     
-                                case 'add_post';
+                                case 'add_post':
                                     include "includes/add_post.php";
                                 break;
 
-                                case 'edit';
+                                case 'edit':
                                     include "includes/edit_post.php";
                                 break;
 
-                                case 'pub';
+                                case 'pub':
                                     publishPost($post_id);
                                     header("Location: posts.php?notify=published&p_id=$post_id");
                                 break;
 
-                                case 'draft';
+                                case 'draft':
                                     draftPost($post_id);
                                     header("Location: posts.php?notify=drafted&p_id=$post_id");
+                                break;
+
+                                case 'reset_views':
+                                    resetViews($post_id);
+                                    header("Location: posts.php?notify=reset_views&p_id=$post_id");
                                 break;
 
                                 default:
