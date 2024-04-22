@@ -1,6 +1,5 @@
 $(document).ready(function() {
-    $('#selectAllBoxes').click(function(event) {
-        console.log('Click');
+    $('#selectAllBoxes').click(function() {
         if(this.checked) {
             $('.checkBoxes').each(function() {
                 this.checked = true;

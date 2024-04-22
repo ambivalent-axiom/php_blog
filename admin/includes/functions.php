@@ -153,13 +153,9 @@ function checkIfExists($column, $value, $operation='check') {
 }
 
 function encryptPass($pass) {
-    global $connection;
-    $query = "SELECT randSalt FROM users";
-    $select_randsalt = mysqli_query($connection, $query);
-    checkQuery($select_randsalt);
-    $row = mysqli_fetch_array($select_randsalt);
-    $salt = $row['randSalt'];
-    return $encrypted_pass = crypt($pass, $salt); 
+    $salt = addSalt();
+    $encrypted_pass = crypt($pass, $salt);
+    return $encrypted_pass;
 }
 
 function getAllPosts($access) {
@@ -189,5 +185,15 @@ function getPostCountByUser($user_id) {
     $get_posts = mysqli_query($connection, $query);
     checkQuery($get_posts);
     return mysqli_num_rows($get_posts);
+}
+
+function addSalt() {
+    $charString = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    $salt = "";
+    for($i=1; $i<=8; $i++) {
+        $index = rand(0, strlen($charString) - 1);
+        $salt = $salt . $charString[$index];
+    }
+    return "$1$" . $salt;
 }
 ?>
