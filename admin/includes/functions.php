@@ -58,31 +58,6 @@ function checkQuery($query) {
         die("Query Failed: " . mysqli_error($connection));
     }
 }
-function getUserLnFn() {
-    if(isset($_SESSION['id'])) {
-        echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
-    } else {
-        echo "Unregistered";
-    }
-}
-function getAuthorByPost($author, $column='user_name') {
-    global $connection;
-    $query = "SELECT * FROM users WHERE user_id = $author ";
-    $select_author = mysqli_query($connection, $query);
-    switch($column) {
-        case 'image';
-            while($author = mysqli_fetch_assoc($select_author)) {
-                return($author['user_image']);
-            }
-        break;
-
-        default:
-            while($author = mysqli_fetch_assoc($select_author)) {
-                return($author['user_name']);
-            }
-        break;
-    }
-}
 function publishPost($post_id) {
     global $connection;
     $query = "UPDATE posts SET post_status = 'published' WHERE 	post_id = {$post_id} ";
@@ -250,7 +225,7 @@ function resetViews($post_id) {
     $update_views = mysqli_query($connection, $query);
     checkQuery($update_views);
 }
-//This lists posts on index page
+//This lists posts on index page + pagination
 function getPostCount($column="", $value="") {
     global $connection;
     if (empty($column)) {
@@ -262,7 +237,7 @@ function getPostCount($column="", $value="") {
     $post_count = mysqli_num_rows($select_all_posts);
     return $post_count;
 }
-function showPostsPaginated($column="", $value="", $offset) {
+function showPostsPaginated($column="", $value="", $offset) {//$per_page for settings
     $per_page = 2;
     global $connection;
     if (empty($column)) {
@@ -282,10 +257,16 @@ function showPostsPaginated($column="", $value="", $offset) {
 }
 function pagination($pages) {
     for($i=1; $i<=$pages; $i++) {
-        echo "<a href='index.php?page={$i}'>{$i}</a>";
+        if(isset($_GET['page']) && $i == $_GET['page']) {
+            echo "<a href='index.php?page={$i}' style='color:#fff; background-color:#554c66'>{$i}</a>";
+        } else {
+            echo "<a href='index.php?page={$i}'>{$i}</a>";
+        }
+        
     }
 }
-function calcOffset() {
+function calcOffset() {//$per_page for settings
+    $per_page = 2;
     if(isset($_GET['page'])) {
         $page = $_GET['page'];
     } else {
@@ -294,8 +275,117 @@ function calcOffset() {
     if($page == "" || $page == 1) {
         $offset = 0; 
     } else {
-        $offset = ($page * 2) - 2;
+        $offset = ($page * $per_page) - $per_page;
     }
     return $offset;
+}
+//User management
+function onlineRegister() {//$user_session_timeout for settings page
+    global $connection;
+    $session = session_id();
+    $user_id = $_SESSION['id'];
+    $time = time();
+    $user_session_timeout = 120;
+    $time_out = $time - $user_session_timeout;
+
+    //check if my session is logged into database
+    $query = "SELECT * FROM users_online WHERE session = '{$session}'";
+    $exec_query = mysqli_query($connection, $query);
+    checkQuery($exec_query);
+    $count = mysqli_num_rows($exec_query);
+
+    if($count == 0) {
+        $query = "INSERT INTO users_online (session, time, user_id) VALUES('$session', '$time', $user_id) ";
+        $exec_query = mysqli_query($connection, $query);
+        checkQuery($exec_query);
+    } else {
+        $query = "UPDATE users_online SET time = '{$time}' WHERE session = '$session' ";
+        $exec_query = mysqli_query($connection, $query);
+        checkQuery($exec_query);
+    }
+    return $time_out;
+}
+function countUsrsOn($time_out) {
+    global $connection;
+    $users_online = mysqli_query($connection, "SELECT * FROM users_online  WHERE time > '$time_out' ");
+    checkQuery($users_online);
+    return $users_online;
+}
+function fetchAndPrint($users) {
+    global $time_out;
+    while($row = mysqli_fetch_assoc($users)) {
+        $id = $row['user_id'];
+        $name = $row['user_name'];
+        $firstnm = $row['user_fn'];
+        $lastnm = $row['user_ln'];
+        $email = $row['user_email'];
+        $image = $row['user_image'];
+        $role = $row['user_role'];
+        $online = [];
+        foreach(countUsrsOn($time_out) as $user) {
+            array_push($online, $user['user_id']);
+        };
+        ?>  <tr>
+                <td><?php echo $id ?></td>
+                <td><?php echo $name ?></td>
+                <td><?php echo $firstnm . " " . $lastnm ?></td>
+                <td><?php echo $email ?></td>
+                
+                <td><img src="/cms/images/user/<?php echo $image ?>" alt="" height="40"></td>
+                <td><?php echo $role ?></td>
+                <td><?php
+                    if(in_array($id, $online)) {
+                        echo "Online";
+                    } else {
+                        echo "Offline";
+                    }
+                ?></td>
+                <td><a href="?source=edit&u_id=<?php echo $id ?>">Edit</a> | 
+                    <a href="?source=del&u_id=<?php echo $id ?>">Delete</a>
+                </td>
+            </tr>
+        <?php
+    }
+}
+function getUsers() {
+    global $connection;
+    $query = "SELECT * FROM users ";
+    $all_users = mysqli_query($connection, $query);
+    fetchAndPrint($all_users);
+}
+function getUsersOnline($time_out) {
+    global $connection;
+    $online = countUsrsOn($time_out);
+    foreach($online as $user) {
+        $query = "SELECT * FROM users WHERE user_id = {$user['user_id']} ";
+        $get_user = mysqli_query($connection, $query);
+        checkQuery($get_user);
+        fetchAndPrint($get_user);
+    }
+}
+function getUserLnFn() {//takes $_SESSION
+    if(isset($_SESSION['id'])) {
+        echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
+    } else {
+        echo "Unregistered";
+    }
+}
+function getAuthorByPost($author, $column='user_name') {
+    global $connection;
+    $query = "SELECT * FROM users WHERE user_id = $author ";
+    $select_author = mysqli_query($connection, $query);
+    switch($column) {
+        case 'image';
+            while($author = mysqli_fetch_assoc($select_author)) {
+                return($author['user_image']);
+            }
+        break;
+
+        default:
+            while($author = mysqli_fetch_assoc($select_author)) {
+                return($author['user_name']);
+            }
+        break;
+    }
 }
 ?>

@@ -5,7 +5,6 @@
         $page = 1;
     }
 ?>
-
 <ul class="pager">
     <?php
         if($page > 1) {

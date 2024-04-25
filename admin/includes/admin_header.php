@@ -2,6 +2,7 @@
 <?php include "functions.php"; ?>
 <?php ob_start(); ?>
 <?php session_start(); ?>
+<?php $time_out = onlineRegister() ?>
 
 <?php
 if(!isset($_SESSION['role'])) {

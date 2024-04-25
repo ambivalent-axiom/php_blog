@@ -7,35 +7,17 @@
             <th>e-mail</th>
             <th>Image</th>
             <th>Role</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        $query = "SELECT * FROM users ";
-        $all_users = mysqli_query($connection, $query);
-        while($row = mysqli_fetch_assoc($all_users)) {
-            $id = $row['user_id'];
-            $name = $row['user_name'];
-            $firstnm = $row['user_fn'];
-            $lastnm = $row['user_ln'];
-            $email = $row['user_email'];
-            $image = $row['user_image'];
-            $role = $row['user_role'];
-            ?>  <tr>
-                    <td><?php echo $id ?></td>
-                    <td><?php echo $name ?></td>
-                    <td><?php echo $firstnm . " " . $lastnm ?></td>
-                    <td><?php echo $email ?></td>
-                    
-                    <td><img src="/cms/images/user/<?php echo $image ?>" alt="" height="40"></td>
-                    <td><?php echo $role ?></td>
-                    <td><a href="?source=edit&u_id=<?php echo $id ?>">Edit</a> | 
-                        <a href="?source=del&u_id=<?php echo $id ?>">Delete</a>
-                    </td>
-                </tr>
-            <?php
-        }
+            if(isset($_GET['source']) && $_GET['source'] == 'online') {
+                getUsersOnline($time_out);
+            } else {
+                getUsers();
+            };
         ?>
 </tbody>
 </table>

@@ -27,18 +27,26 @@
                         
                             switch($source) {
 
-                                case 'edit';
+                                case 'edit':
                                     include "includes/edit_user.php";
                                 break;
 
-                                case 'del';
+                                case 'del':
                                     $query = "DELETE FROM users WHERE user_id = {$user_id} ";
                                     $exec_query = mysqli_query($connection, $query);
                                     checkQuery($exec_query);
                                     header("Location: users.php");
                                 break;
 
-                                case 'add_user';
+                                case 'online':
+                                    if($_SESSION['role'] === 'admin') {
+                                        include "includes/view_all_users.php";
+                                    } else {
+                                        header("Location: index.php");
+                                    }
+                                break;
+
+                                case 'add_user':
                                     include "includes/add_user.php";
                                 break;
 
