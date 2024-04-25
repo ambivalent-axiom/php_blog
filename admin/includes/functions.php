@@ -192,7 +192,7 @@ function getPosts($sql) {
         ?>
         <h2>
             <a href='post.php?p_id=<?php echo $blog_post_id; ?>'>
-                <?php echo $blog_post_title ?>
+                <?php echo $blog_post_title ?> <?php echo $blog_post_id ?>
             </a>
         </h2>
         <p class='lead'>by
@@ -249,5 +249,53 @@ function resetViews($post_id) {
     $query = "UPDATE posts SET post_views = 0 WHERE post_id = $post_id ";
     $update_views = mysqli_query($connection, $query);
     checkQuery($update_views);
+}
+//This lists posts on index page
+function getPostCount($column="", $value="") {
+    global $connection;
+    if (empty($column)) {
+        $query = "SELECT * FROM posts WHERE post_status = 'published' ORDER BY post_id";
+    } else {
+        $query = "SELECT * FROM posts WHERE post_status = 'published' AND {$column} = {$value} ORDER BY post_id";
+    }
+    $select_all_posts = mysqli_query($connection, $query);
+    $post_count = mysqli_num_rows($select_all_posts);
+    return $post_count;
+}
+function showPostsPaginated($column="", $value="", $offset) {
+    $per_page = 2;
+    global $connection;
+    if (empty($column)) {
+        $query = "SELECT * FROM posts WHERE post_status = 'published' ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+    } else {
+        $query = "SELECT * FROM posts WHERE post_status = 'published' AND {$column} = {$value} ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+    }
+    $select_all_posts = mysqli_query($connection, $query);
+    $post_count = getPostCount($column, $value);
+    $pages = ceil($post_count/$per_page);
+    if($post_count > 0) {
+        getPosts($select_all_posts);
+    } else {
+        echo "<h1>No posts!</h1>";
+    }
+    return $pages;
+}
+function pagination($pages) {
+    for($i=1; $i<=$pages; $i++) {
+        echo "<a href='index.php?page={$i}'>{$i}</a>";
+    }
+}
+function calcOffset() {
+    if(isset($_GET['page'])) {
+        $page = $_GET['page'];
+    } else {
+        $page = "";
+    }
+    if($page == "" || $page == 1) {
+        $offset = 0; 
+    } else {
+        $offset = ($page * 2) - 2;
+    }
+    return $offset;
 }
 ?>

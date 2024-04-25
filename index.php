@@ -1,4 +1,5 @@
 <?php include "includes/header.php" ?>
+<?php $offset = calcOffset(); ?>
 <body>
     <!-- Navigation -->
     <?php include "includes/navigation.php" ?>
@@ -10,46 +11,28 @@
             <div class="col-md-8">
                 <!-- First Blog Post -->
                 <?php
-                    if(isset($_GET['page'])){
-                        switch($_GET['page']){
+                    if(isset($_GET['filter'])){
+                        switch($_GET['filter']){
                             case 'categorized';
-                                if(isset($_GET['cat_id'])) {
-                                    $cat_filer = $_GET['cat_id'];
-                                }
-                                $query = "SELECT * FROM posts WHERE post_status = 'published' AND post_category_id = {$cat_filer} ORDER BY post_id DESC";
-                                $select_all_posts = mysqli_query($connection, $query);
-                                getPosts($select_all_posts);
+                                $pages = showPostsPaginated('post_category_id', $_GET['cat_id'], $offset);
                                 break;
 
                             case 'by_author';
-                                $user = $_GET["u_id"];
-                                $query = "SELECT * FROM posts WHERE post_author = '$user' ORDER BY post_id DESC";
-                                $author_posts = mysqli_query($connection, $query);
-                                checkQuery($author_posts);
-                                getPosts($author_posts);
+                                $pages = showPostsPaginated('post_author', $_GET["u_id"], $offset);
                                 break;
                         }
                     } else {
-                        $query = "SELECT * FROM posts WHERE post_status = 'published' ORDER BY post_id DESC";
-                        $select_all_posts = mysqli_query($connection, $query);
-                        if(mysqli_num_rows($select_all_posts) > 0) {
-                            getPosts($select_all_posts);
-                        } else {
-                            echo "<h1>No posts!</h1>";
+                        $pages = showPostsPaginated("", '', $offset);
+                    }
+                ?>
+                <!-- Pager -->
+                <?php
+                    if(isset($pages)) {
+                        if($pages > 1) {
+                            include "pager.php";
                         }
                     }
                 ?>
-
-                <!-- Pager -->
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
-
             </div>
             <!-- Blog Sidebar Widgets Column -->
             <?php include "includes/sidebar.php" ?>

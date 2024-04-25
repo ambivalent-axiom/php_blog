@@ -1,5 +1,5 @@
 <?php include 'admin/includes/functions.php' ?>
 
 <?php
-    echo addSalt();
+    showPosts('Test\n', 'TEst2')
 ?>

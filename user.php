@@ -42,7 +42,7 @@
             </p>
 
             <p>
-                <a href="index.php?u_id=<?php echo $user_id; ?>&page=by_author">
+                <a href="index.php?u_id=<?php echo $user_id; ?>&filter=by_author">
                     Posts: <?php echo $posts; ?>
                 </a>
             </p>
