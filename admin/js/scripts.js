@@ -19,3 +19,12 @@ $(document).ready(function() {
         $(this).remove();
     });
 });
+
+function loadUsersOnline() {
+    $.get("includes/functions.php?onlineusers", function(data) {
+        $(".usersonline").text(data);
+    });
+}
+setInterval(function() {
+    loadUsersOnline();
+}, 500);

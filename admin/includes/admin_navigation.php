@@ -15,7 +15,7 @@
                 if($_SESSION['role'] == 'admin') {
                     ?><ul class="nav navbar-left top-nav" style="padding-left: 100px">
                         <li>
-                            <a href="users.php?source=online" style="background-color: transparent;">Users Online: <?php echo mysqli_num_rows(countUsrsOn($time_out)) ?></a>
+                            <a href="users.php?source=online" style="background-color: transparent;">Users Online: <span class="usersonline"></span></a>
                         </li>
                     </ul><?php
                 }

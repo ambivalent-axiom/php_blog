@@ -129,10 +129,11 @@
                 $get_draft_posts = mysqli_query($connection, $query_get_draft_posts);
                 $penging_comment_count = mysqli_num_rows($get_pending_comments);
                 $draft_post_count = mysqli_num_rows($get_draft_posts);
+                $users_online = mysqli_num_rows(countUsrsOn());
 
-                $element_text = ['Active Posts', 'Draft Posts', 'Comments', 'Pending Comments', 'Users', 'Categories'];
-                $element_count = [$post_counts, $draft_post_count, $comment_counts, $penging_comment_count, $user_counts, $category_counts];
-                for($i = 0; $i < 6; $i++) {
+                $element_text = ['Draft Posts', 'Pending Comments', 'Users Online'];
+                $element_count = [$draft_post_count, $penging_comment_count, $users_online];
+                for($i = 0; $i < 3; $i++) {
                     echo "['{$element_text[$i]}'" . "," . "{$element_count[$i]}],";
                 }
             ?>

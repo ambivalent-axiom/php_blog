@@ -1,5 +1,7 @@
 <?php include 'admin/includes/functions.php' ?>
 
-<?php
-    showPosts('Test\n', 'TEst2')
-?>
+<script>
+    setInterval(function() {
+        console.log("Beep!");
+    }, 500);
+</script>

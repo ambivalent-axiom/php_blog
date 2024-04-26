@@ -305,12 +305,27 @@ function onlineRegister() {//$user_session_timeout for settings page
     }
     return $time_out;
 }
-function countUsrsOn($time_out) {
+function countUsrsOn() {
+    global $time_out;
     global $connection;
     $users_online = mysqli_query($connection, "SELECT * FROM users_online  WHERE time > '$time_out' ");
     checkQuery($users_online);
     return $users_online;
 }
+function countAjax() {
+    if(isset($_GET['onlineusers'])) {//echos number directly for ajax
+        include '../../includes/db.php';
+        $time = time();
+        $user_session_timeout = 120;
+        $time_out = $time - $user_session_timeout;
+        $users_online = mysqli_query($connection, "SELECT * FROM users_online WHERE time > '$time_out' ");
+        checkQuery($users_online);
+        $result = mysqli_num_rows($users_online);
+        echo $result;
+    }
+}
+countAjax();//execution for ajax
+
 function fetchAndPrint($users) {
     global $time_out;
     while($row = mysqli_fetch_assoc($users)) {
