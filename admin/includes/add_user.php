@@ -2,12 +2,12 @@
 <?php
 
     if(isset($_POST['add_user'])) {
-        $user_name = $_POST['username'];
+        $user_name = escape($_POST['username']);
         $user_pass = encryptPass($_POST['pass']);
-        $user_fname = $_POST['fname'];
-        $user_lname = $_POST['lname'];
-        $user_email = $_POST['email'];
-        $user_role = $_POST['user_role'];
+        $user_fname = escape($_POST['fname']);
+        $user_lname = escape($_POST['lname']);
+        $user_email = escape($_POST['email']);
+        $user_role = escape($_POST['user_role'])$_POST['user_role'];
         $user_image = $_FILES['user_image']['name'];
         $user_image_temp = $_FILES['user_image']['tmp_name'];
         move_uploaded_file($user_image_temp, "../images/user/$user_image");

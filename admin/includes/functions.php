@@ -1,4 +1,5 @@
 <?php
+//CATEGORY MANAGEMENT
 function insert_categories() {
     global $connection;
 
@@ -43,71 +44,20 @@ function deleteCategory() {
         header("Location: categories.php");
     }
 }
-function deletePost($post_to_delete) {
+//SECURITY
+function encryptPass(string $pass, int $cost=10): string {
+    $encrypted_pass = password_hash($pass, PASSWORD_BCRYPT, array('cost' => $cost));
+    return $encrypted_pass;
+}
+function escape(string $string): string {//use this before sending string to database
     global $connection;
-    $clear_com_quer = "DELETE FROM comments WHERE com_post_id = $post_to_delete ";
-    $query = "DELETE FROM posts WHERE post_id = {$post_to_delete} ";
-    $clear_comments = mysqli_query($connection, $clear_com_quer);
-    checkQuery($clear_comments);
-    $execure_query = mysqli_query($connection, $query);
-    checkQuery($execure_query);
+    return mysqli_real_escape_string($connection, trim($string));
 }
 function checkQuery($query) {
     global $connection;
     if(!$query) {
         die("Query Failed: " . mysqli_error($connection));
     }
-}
-function publishPost($post_id) {
-    global $connection;
-    $query = "UPDATE posts SET post_status = 'published' WHERE 	post_id = {$post_id} ";
-    $publish = mysqli_query($connection, $query);
-    checkQuery($publish); 
-}
-function draftPost($post_id) {
-    global $connection;
-    $query = "UPDATE posts SET post_status = 'draft' WHERE 	post_id = {$post_id} ";
-    $draft = mysqli_query($connection, $query);
-    checkQuery($draft);
-}
-function checkIfExists($column, $value, $operation='check') {
-    global $connection;
-    $query = "SELECT * FROM users WHERE {$column} = '{$value}' ";
-    $exec_query = mysqli_query($connection, $query);
-    checkQuery($exec_query);
-    switch($operation) {
-        case 'check';
-            if(mysqli_num_rows($exec_query) == 0) {
-                return false;
-            } else {
-                return true;
-            };
-        break;
-
-        case 'get_id';
-            if(mysqli_num_rows($exec_query) >= 1) {
-                while($user = mysqli_fetch_assoc($exec_query)) {
-                    $user_id = $user['user_id'];
-                    return $user_id;
-                }
-            } else {
-                return false;
-            };
-        break;
-
-        default:
-            if(mysqli_num_rows($exec_query) == 0) {
-                return false;
-            } else {
-                return true;
-            };
-        break;
-    }
-
-}
-function encryptPass(string $pass, int $cost=10): string {
-    $encrypted_pass = password_hash($pass, PASSWORD_BCRYPT, array('cost' => $cost));
-    return $encrypted_pass;
 }
 //POSTS MANAGEMENT
 //Comments
@@ -156,14 +106,27 @@ function getComments(string $status='approved', int $post_id): void {
     <?php
     }
 }
+//actions
+function publishPost($post_id) {
+    global $connection;
+    $query = "UPDATE posts SET post_status = 'published' WHERE 	post_id = {$post_id} ";
+    $publish = mysqli_query($connection, $query);
+    checkQuery($publish); 
+}
+function draftPost($post_id) {
+    global $connection;
+    $query = "UPDATE posts SET post_status = 'draft' WHERE 	post_id = {$post_id} ";
+    $draft = mysqli_query($connection, $query);
+    checkQuery($draft);
+}
 function getAllPosts($access) {
     global $connection;
     if($access === 'admin') {
-        $query = "SELECT * FROM posts ";
+        $query = "SELECT * FROM posts ORDER BY post_id DESC ";
         $all_posts = mysqli_query($connection, $query);
         return $all_posts;
     } else {
-        $query = "SELECT * FROM posts WHERE post_author = {$access} ";
+        $query = "SELECT * FROM posts WHERE post_author = {$access} ORDER BY post_id DESC ";
         $all_posts = mysqli_query($connection, $query);
         return $all_posts;
     }
@@ -194,7 +157,7 @@ function getPosts($sql) {
         ?>
         <h2>
             <a href='post.php?p_id=<?php echo $blog_post_id; ?>'>
-                <?php echo $blog_post_title ?> <?php echo $blog_post_id ?>
+                <?php echo $blog_post_title ?>
             </a>
         </h2>
         <p class='lead'>by
@@ -241,6 +204,15 @@ function clonePost($post_id) {
     $query = "INSERT INTO posts(post_category_id, post_title, post_author, post_date, post_image, post_content, post_status, post_tags) VALUES({$post_category_id}, '{$post_title}', {$post_author}, '{$post_date}', '{$post_image}', '{$post_content}', 'draft', '{$post_tags}') ";
     $clone_post = mysqli_query($connection, $query);
     checkQuery($clone_post);
+}
+function deletePost($post_to_delete) {
+    global $connection;
+    $clear_com_quer = "DELETE FROM comments WHERE com_post_id = $post_to_delete ";
+    $query = "DELETE FROM posts WHERE post_id = {$post_to_delete} ";
+    $clear_comments = mysqli_query($connection, $clear_com_quer);
+    checkQuery($clear_comments);
+    $execure_query = mysqli_query($connection, $query);
+    checkQuery($execure_query);
 }
 function postViewed($post_id) {
     global $connection;
@@ -442,5 +414,40 @@ function getUserById(int $user_id): mysqli_result {
     $get_user = mysqli_query($connection, $query);
     checkQuery($get_user);
     return $get_user;
+}
+function checkIfExists($column, $value, $operation='check') {
+    global $connection;
+    $query = "SELECT * FROM users WHERE {$column} = '{$value}' ";
+    $exec_query = mysqli_query($connection, $query);
+    checkQuery($exec_query);
+    switch($operation) {
+        case 'check';
+            if(mysqli_num_rows($exec_query) == 0) {
+                return false;
+            } else {
+                return true;
+            };
+        break;
+
+        case 'get_id';
+            if(mysqli_num_rows($exec_query) >= 1) {
+                while($user = mysqli_fetch_assoc($exec_query)) {
+                    $user_id = $user['user_id'];
+                    return $user_id;
+                }
+            } else {
+                return false;
+            };
+        break;
+
+        default:
+            if(mysqli_num_rows($exec_query) == 0) {
+                return false;
+            } else {
+                return true;
+            };
+        break;
+    }
+
 }
 ?>

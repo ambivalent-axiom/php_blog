@@ -66,13 +66,13 @@
                     <?php
                         if(isset($_POST['comment'])) {
                             if(isset($_SESSION['id'])) {
-                                $com_auth = $_SESSION['username'];
-                                $com_email = $_SESSION['email'];
+                                $com_auth = escape($_SESSION['username']);
+                                $com_email = escape($_SESSION['email']);
                             } else {
-                                $com_auth = $_POST['name'];
-                                $com_email = $_POST['email'];
+                                $com_auth = escape($_POST['name']);
+                                $com_email = escape($_POST['email']);
                             }
-                            $comment = $_POST['com_content'];
+                            $comment = escape($_POST['com_content']);
 
                             if(!empty($com_auth) && !empty($com_email) && !empty($comment)) {
                                 addComment($post_id, $com_auth, $com_email, $comment);

@@ -11,7 +11,7 @@
     }
 
     if(isset($_POST['update_user'])) {
-        $user_name = $_POST['username'];
+        $user_name = escape($_POST['username']);
 
         if(empty($_POST['pass'])) {
             $user_pass = $pass;
@@ -19,9 +19,9 @@
             $user_pass = encryptPass($_POST['pass']);
         }
         
-        $user_fname = $_POST['fname'];
-        $user_lname = $_POST['lname'];
-        $user_email = $_POST['email'];
+        $user_fname = escape($_POST['fname']);
+        $user_lname = escape($_POST['lname']);
+        $user_email = escape($_POST['email']);
         
         $user_image = $_FILES['user_image']['name'];
         $user_image_temp = $_FILES['user_image']['tmp_name'];
@@ -31,7 +31,7 @@
         }
 
         if(isset($_POST['user_role'])) {
-            $user_role = $_POST['user_role'];
+            $user_role = escape($_POST['user_role']);
         } else {
             $user_role = $role;
         }
