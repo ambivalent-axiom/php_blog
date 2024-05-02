@@ -13,7 +13,14 @@
     </thead>
     <tbody>
         <?php
-        $query = "SELECT * FROM comments ";
+        if(isset($_GET['p_id']) && $_GET['p_id'] != "") {
+            echo "Comments filtered by post ID: " . $_GET['p_id'];
+            $query = "SELECT * FROM comments WHERE com_post_id = {$_GET['p_id']} ";
+            $p_id = $_GET['p_id'];
+        } else {
+            $query = "SELECT * FROM comments ";
+            $p_id = "";
+        }
         $all_posts = mysqli_query($connection, $query);
         while($row = mysqli_fetch_assoc($all_posts)) {
             $id = $row['com_id'];
@@ -37,9 +44,9 @@
                     <td><?php echo $content . "..."?></td>
                     <td><?php echo $date ?></td>
                     <td><?php echo $status ?></td>
-                    <td><a href="?source=appr&com_id=<?php echo $id ?>">Approve</a> | 
-                        <a href="?source=dis&com_id=<?php echo $id ?>">Disapprove</a> | 
-                        <a href="?source=del&com_id=<?php echo $id ?>">Delete</a>
+                    <td><a href="?source=appr&com_id=<?php echo $id ?>&p_id=<?php echo $p_id ?>">Approve</a> | 
+                        <a href="?source=dis&com_id=<?php echo $id ?>&p_id=<?php echo $p_id ?>">Disapprove</a> | 
+                        <a href="?source=del&com_id=<?php echo $id ?>&p_id=<?php echo $p_id ?>">Delete</a>
                     </td>
                 </tr>
             <?php

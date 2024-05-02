@@ -78,7 +78,7 @@ if(isset($_POST['checkBoxArray'])) {
                     $status = $row['post_status'];
                     $image = $row['post_image'];
                     $tags = $row['post_tags'];
-                    $comments = $row['post_comment_count'];
+                    $comments = getCommentCount($id);
                     $date = $row['post_date'];
                     $author_name = getAuthorByPost($author);
                     $post_views = $row['post_views'];
@@ -97,7 +97,9 @@ if(isset($_POST['checkBoxArray'])) {
                             <td><?php echo $status ?></td>
                             <td><img src='../images/<?php echo $image ?>' alt='image' style="width:100px;height:50px;"></td>
                             <td><?php echo $tags ?></td>
-                            <td><?php echo $comments ?></td>
+                            
+                            <td><a href="comments.php?p_id=<?php echo $id ?>"><?php echo $comments ?></a></td>
+
                             <td><?php echo $post_views ?></td>
                             <td><?php echo $date ?></td>
                             <td><a onclick="javascript: 

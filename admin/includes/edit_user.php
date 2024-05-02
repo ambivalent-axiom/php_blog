@@ -1,7 +1,5 @@
 <?php
-    $user_to_edit = $_GET['u_id'];
-    $query = "SELECT * FROM users WHERE user_id = '{$user_to_edit}'";
-    $user_edit_id = mysqli_query($connection, $query);
+    $user_edit_id = getUserById($_GET['u_id']);
     while($row = mysqli_fetch_assoc($user_edit_id)) {
         $name = $row['user_name'];
         $pass = $row['user_pass'];
@@ -14,17 +12,23 @@
 
     if(isset($_POST['update_user'])) {
         $user_name = $_POST['username'];
-        if($pass === $_POST['pass']) {
-            $user_pass = $_POST['pass'];
+
+        if(empty($_POST['pass'])) {
+            $user_pass = $pass;
         } else {
-            $user_pass = crypt($_POST['pass'], $pass);
+            $user_pass = encryptPass($_POST['pass']);
         }
         
         $user_fname = $_POST['fname'];
         $user_lname = $_POST['lname'];
         $user_email = $_POST['email'];
+        
         $user_image = $_FILES['user_image']['name'];
         $user_image_temp = $_FILES['user_image']['tmp_name'];
+
+        if(empty($user_image)) {
+            $user_image = $image;
+        }
 
         if(isset($_POST['user_role'])) {
             $user_role = $_POST['user_role'];
@@ -54,7 +58,7 @@
 
     <div class="form-group">
         <label for="pass">Password</label>
-        <input value="<?php if(isset($pass)) { echo $pass; } ?>" type="password" class="form-control" name="pass">
+        <input autocomplete="off" type="password" class="form-control" name="pass">
     </div>
 
     <div class="form-group">
@@ -73,7 +77,7 @@
     </div>
 
     <div class="form-group">
-        <img class="input-lg pull-left" src="/cms/images/user/<?php echo $image ?>" alt="">
+        <img class="input-lg pull-left" src="../images/user/<?php echo $image ?>" alt="image">
         <div class="figure">
             <label for="user_image">Image</label>
             <input type="file" name="user_image">

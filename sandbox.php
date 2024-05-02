@@ -1,7 +1,8 @@
 <?php include 'admin/includes/functions.php' ?>
 
-<script>
-    setInterval(function() {
-        console.log("Beep!");
-    }, 500);
-</script>
+<?php
+
+echo password_hash('secret', PASSWORD_BCRYPT, array('cost' => 10));
+
+
+?>

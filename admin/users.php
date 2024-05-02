@@ -16,7 +16,6 @@
                         
                             if(isset($_GET["source"])) {
                                 $source = $_GET['source'];
-
                             } else {
                                 $source = "";
                             }
@@ -26,15 +25,16 @@
                             }
                         
                             switch($source) {
-
                                 case 'edit':
-                                    include "includes/edit_user.php";
+                                    if(isset($_GET['u_id'])) {
+                                        include "includes/edit_user.php";
+                                    } else {
+                                        header("Location: users.php");
+                                    }
                                 break;
 
                                 case 'del':
-                                    $query = "DELETE FROM users WHERE user_id = {$user_id} ";
-                                    $exec_query = mysqli_query($connection, $query);
-                                    checkQuery($exec_query);
+                                    deleteUser($user_id);
                                     header("Location: users.php");
                                 break;
 
@@ -58,7 +58,6 @@
                                     }
                                 break;
                             }
-                    
                         ?>
                     </div>
                 </div>

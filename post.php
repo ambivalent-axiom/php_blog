@@ -48,7 +48,10 @@
                             ?>
                         </p>
                     <p>
-                        <span class='glyphicon glyphicon-time'></span> Posted on <?php echo $blog_post_date; ?> Views: <?php echo $blog_post_views; ?>
+                        <span class='glyphicon glyphicon-time'></span> 
+                            Posted on <?php echo $blog_post_date; ?> 
+                            | Views: <?php echo $blog_post_views; ?>
+                            | Comments: <?php echo getCommentCount($post_id); ?>
                     </p>
                         <img class='img-responsive' src='images/<?php echo $blog_post_image; ?>' alt=''>
                     <hr>
@@ -62,7 +65,6 @@
 
                     <?php
                         if(isset($_POST['comment'])) {
-
                             if(isset($_SESSION['id'])) {
                                 $com_auth = $_SESSION['username'];
                                 $com_email = $_SESSION['email'];
@@ -110,48 +112,16 @@
                     </form>
                     
                 <hr>
-
                 <!-- Posted Comments -->
                 <!-- Comment -->
                 <?php
-                    $query = "SELECT * FROM comments WHERE com_status = 'Approved' AND com_post_id = $post_id ORDER BY com_id DESC ";
-                    $get_comments = mysqli_query($connection, $query);
-                    checkQuery($get_comments);
-
-                    while($comment = mysqli_fetch_assoc($get_comments)) {
-                        $author = $comment['com_author'];
-                        $email = $comment['com_email'];
-                        $date = $comment['com_date'];
-                        $content = $comment['com_content'];
-                        $user = checkIfExists('user_email', $email, 'get_id');
-
-                        if(!empty($user)) {
-                            $image = getAuthorByPost($user, 'image');
-                        }
-                    ?>
-                        <div class="media">
-                            <img class="media-object pull-left" src="/cms/images/user/user.png" alt="" height='40'>
-
-                            <div class="media-body">
-                                <h4 class="media-heading"><?php echo $author ?>
-                                    <small><?php echo $date ?></small>
-                                    <small><?php echo $email ?></small>
-                                </h4>
-                                    <?php echo $content ?>
-                            </div>
-                        </div>
-                    <?php
-                    }
+                    getComments('approved', $post_id);
                 ?>
-
                 </div>
-
             <!-- Blog Sidebar Widgets Column -->
             <?php include "includes/sidebar.php" ?>
-
         </div>
         <!-- /.row -->
-
         <hr>
 <!-- Footer -->
  <?php include "includes/footer.php" ?>

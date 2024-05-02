@@ -70,16 +70,6 @@ function draftPost($post_id) {
     $draft = mysqli_query($connection, $query);
     checkQuery($draft);
 }
-function addComment($post_id, $com_auth, $com_email, $comment) {
-    global $connection;
-    $query = "INSERT INTO comments (com_post_id, com_author, com_email, com_content, com_date) " .
-    "VALUES ({$post_id}, '{$com_auth}', '{$com_email}', '{$comment}', now()) ";
-    $save_comm = mysqli_query($connection, $query);
-    checkQuery($save_comm);
-    $increment_com = "UPDATE posts SET post_comment_count = post_comment_count + 1 WHERE post_id = $post_id";
-    $Update_com_count = mysqli_query($connection, $increment_com);
-    checkQuery($Update_com_count);
-}
 function checkIfExists($column, $value, $operation='check') {
     global $connection;
     $query = "SELECT * FROM users WHERE {$column} = '{$value}' ";
@@ -115,10 +105,56 @@ function checkIfExists($column, $value, $operation='check') {
     }
 
 }
-function encryptPass($pass) {
-    $salt = addSalt();
-    $encrypted_pass = crypt($pass, $salt);
+function encryptPass(string $pass, int $cost=10): string {
+    $encrypted_pass = password_hash($pass, PASSWORD_BCRYPT, array('cost' => $cost));
     return $encrypted_pass;
+}
+//POSTS MANAGEMENT
+//Comments
+function addComment($post_id, $com_auth, $com_email, $comment) {
+    global $connection;
+    $query = "INSERT INTO comments (com_post_id, com_author, com_email, com_content, com_date) " .
+    "VALUES ({$post_id}, '{$com_auth}', '{$com_email}', '{$comment}', now()) ";
+    $save_comm = mysqli_query($connection, $query);
+    checkQuery($save_comm);
+}
+function getCommentCount($post_id) {
+    global $connection;
+    $query = "SELECT * FROM comments WHERE com_post_id = {$post_id} ";
+    $comments = mysqli_query($connection, $query);
+    checkQuery($comments);
+    return mysqli_num_rows($comments);
+}
+function getComments(string $status='approved', int $post_id): void {
+    global $connection;
+    $query = "SELECT * FROM comments WHERE com_status = '$status' AND com_post_id = $post_id ORDER BY com_id DESC ";
+    $get_comments = mysqli_query($connection, $query);
+    checkQuery($get_comments);
+
+    while($comment = mysqli_fetch_assoc($get_comments)) {
+        $author = $comment['com_author'];
+        $email = $comment['com_email'];
+        $date = $comment['com_date'];
+        $content = $comment['com_content'];
+        $user = checkIfExists('user_email', $email, 'get_id');
+
+        if(!empty($user)) {
+            $image = getAuthorByPost($user, 'image');
+        }
+    ?>
+        <div class="media">
+            <img class="media-object pull-left" src="/cms/images/user/user.png" alt="" height='40'>
+
+            <div class="media-body">
+                <h4 class="media-heading"><?php echo $author ?>
+                    <small><?php echo $date ?></small>
+                    <small><?php echo $email ?></small>
+                </h4>
+                    <?php echo $content ?>
+            </div>
+        </div>
+    <?php
+    }
 }
 function getAllPosts($access) {
     global $connection;
@@ -146,15 +182,6 @@ function getPostCountByUser($user_id) {
     checkQuery($get_posts);
     return mysqli_num_rows($get_posts);
 }
-function addSalt() {
-    $charString = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    $salt = "";
-    for($i=1; $i<=8; $i++) {
-        $index = rand(0, strlen($charString) - 1);
-        $salt = $salt . $charString[$index];
-    }
-    return "$1$" . $salt;
-}
 function getPosts($sql) {
     while($post = mysqli_fetch_assoc($sql)) {
         $blog_post_id = $post['post_id'];
@@ -176,7 +203,9 @@ function getPosts($sql) {
             </a>
         </p>
         <p>
-            <span class='glyphicon glyphicon-time'></span> Posted on <?php echo $blog_post_date ?>
+            <span class='glyphicon glyphicon-time'></span> 
+                Posted on <?php echo $blog_post_date ?>
+                | Comments: <?php echo getCommentCount($blog_post_id) ?>
         </p>
         <a href='post.php?p_id=<?php echo $blog_post_id ?>'>
             <img class='img-responsive' src='images/<?php echo $blog_post_image ?>' alt=''>
@@ -279,7 +308,7 @@ function calcOffset() {//$per_page for settings
     }
     return $offset;
 }
-//User management
+//USER MANAGEMENT
 function onlineRegister() {//$user_session_timeout for settings page
     global $connection;
     $session = session_id();
@@ -372,9 +401,7 @@ function getUsersOnline($time_out) {
     global $connection;
     $online = countUsrsOn($time_out);
     foreach($online as $user) {
-        $query = "SELECT * FROM users WHERE user_id = {$user['user_id']} ";
-        $get_user = mysqli_query($connection, $query);
-        checkQuery($get_user);
+        $get_user = getUserById($user['user_id']);
         fetchAndPrint($get_user);
     }
 }
@@ -402,5 +429,18 @@ function getAuthorByPost($author, $column='user_name') {
             }
         break;
     }
+}
+function deleteUser(int $user_id): void {
+    global $connection;
+    $query = "DELETE FROM users WHERE user_id = {$user_id} ";
+    $exec_query = mysqli_query($connection, $query);
+    checkQuery($exec_query);
+}
+function getUserById(int $user_id): mysqli_result {
+    global $connection;
+    $query = "SELECT * FROM users WHERE user_id = {$user_id} ";
+    $get_user = mysqli_query($connection, $query);
+    checkQuery($get_user);
+    return $get_user;
 }
 ?>
