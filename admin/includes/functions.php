@@ -348,7 +348,7 @@ function fetchAndPrint($users) {
                 <td><?php echo $firstnm . " " . $lastnm ?></td>
                 <td><?php echo $email ?></td>
                 
-                <td><img src="/cms/images/user/<?php echo $image ?>" alt="" height="40"></td>
+                <td><img src="../images/user/<?php echo $image ?>" alt="" height="40"></td>
                 <td><?php echo $role ?></td>
                 <td><?php
                     if(in_array($id, $online)) {
