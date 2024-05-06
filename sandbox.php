@@ -4,5 +4,8 @@
 ?>
 
 <?php
-echo date('Y-m-d');
+
+$userInput = "<script> alert('hello'); </script>";
+echo $userInput;
+//echo htmlspecialchars($userInput, ENT_QUOTES, 'UTF-8');
 ?>
