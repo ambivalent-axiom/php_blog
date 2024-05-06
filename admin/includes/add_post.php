@@ -11,7 +11,7 @@
 
         $post_tags = mysqli_real_escape_string($connection, $_POST['post_tags']);
         $post_content = mysqli_real_escape_string($connection, $_POST['post_content']);
-        $post_date = date('d-m-y');
+        $post_date = date('Y-m-d');
 
         move_uploaded_file($post_image_temp, "../images/$post_image");
 
