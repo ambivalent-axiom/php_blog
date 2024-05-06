@@ -7,8 +7,8 @@
 if(isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['pass'];
-    $username = mysqli_real_escape_string($connection, $username);
-    $password = mysqli_real_escape_string($connection, $password);
+    $username = escape($username);
+    $password = escape($password);
 
     $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
     $exec_query = mysqli_query($connection, $query);
