@@ -1,6 +1,7 @@
 <?php
     $user_edit_id = getUserById($_GET['u_id']);
     while($row = mysqli_fetch_assoc($user_edit_id)) {
+        $user_id = $row['user_id'];
         $name = $row['user_name'];
         $pass = $row['user_pass'];
         $firstnm = $row['user_fn'];
@@ -40,7 +41,7 @@
         
         $query = "UPDATE users SET user_name = '{$user_name}', user_pass = '{$user_pass}', " .
                 "user_fn = '{$user_fname}', user_ln = '{$user_lname}', user_email = '{$user_email}', user_image = '{$user_image}', user_role = '{$user_role}' " .
-                "WHERE user_id = {$user_to_edit} ";
+                "WHERE user_id = {$user_id} ";
 
         $update_post = mysqli_query($connection, $query);
 
