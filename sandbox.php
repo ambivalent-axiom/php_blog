@@ -1,8 +1,8 @@
-<?php include 'admin/includes/functions.php' ?>
+<?php 
+    include 'admin/includes/functions.php';
+    include 'includes/db.php';
+?>
 
 <?php
-
-echo password_hash('secret', PASSWORD_BCRYPT, array('cost' => 10));
-
 
 ?>

@@ -51,7 +51,8 @@ function encryptPass(string $pass, int $cost=10): string {
 }
 function escape(string $string): string {//use this before sending string to database
     global $connection;
-    return mysqli_real_escape_string($connection, trim($string));
+    $stripScript = preg_replace('<script>', "", $string);
+    return mysqli_real_escape_string($connection, trim($stripScript));
 }
 function checkQuery($query) {
     global $connection;

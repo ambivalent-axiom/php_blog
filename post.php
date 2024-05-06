@@ -76,8 +76,6 @@
 
                             if(!empty($com_auth) && !empty($com_email) && !empty($comment)) {
                                 addComment($post_id, $com_auth, $com_email, $comment);
-                                //header("location: post.php?p_id=$post_id");
-                                //exit;
                             } else {
                                 echo "<script>alert('Fields cannot be empty!')</script>";
                             }
