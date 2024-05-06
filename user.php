@@ -25,7 +25,7 @@
 <!-- Page Content -->
 <div class="container thumbnail">
     <div class="col-md-3">
-    <img class="pull-left" src="/cms/images/user/<?php echo $user_image ?>" alt="" height="200">
+    <img class="pull-left" src="images/user/<?php echo $user_image ?>" alt="" height="200">
     </div>
 
         <div class="col-md-3 alert">
