@@ -1,4 +1,14 @@
 <?php
+    //dependencies
+    require 'phpmailer/Exception.php';
+    require 'phpmailer/PHPMailer.php';
+    require 'phpmailer/SMTP.php';
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+
+
+
 //CATEGORY MANAGEMENT
 function insert_categories() {
     global $connection;
@@ -449,5 +459,32 @@ function checkIfExists($column, $value, $operation='check') {
         break;
     }
 
+}
+//emailing and messaging
+function sendEmailNotification(string $from, string $subject, string $content): void {
+    $mail = new PHPMailer(true);
+    try {
+        // Server settings
+        //$mail->SMTPDebug = 2;
+        $mail->isSMTP();
+        $mail->Host       = 'mail.inbox.lv';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'ambax.io@inbox.lv';
+        $mail->Password   = 'JapsTQ786R';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
+
+        // Recipients
+        $mail->setFrom('ambax.io@inbox.lv', $from);
+        $mail->addAddress('artmelnis@gmail.com');
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $content;
+        $mail->send();
+    } catch (Exception $e) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+    }
 }
 ?>
