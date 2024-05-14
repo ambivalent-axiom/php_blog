@@ -244,7 +244,7 @@ function resetViews($post_id) {
     checkQuery($update_views);
 }
 //This lists posts on index page + pagination
-function getPostCount(string $column="", string $value="", string $prefix): int {
+function getPostCount($column="", $value="", $prefix) {
     global $connection;
     if (empty($column)) {
         $query = $prefix . " ORDER BY post_id";
@@ -259,7 +259,7 @@ function getPostCount(string $column="", string $value="", string $prefix): int 
     $post_count = mysqli_num_rows($select_all_posts);
     return $post_count;
 }
-function showPostsPaginated($column="", $value="", $offset, string $role="") {//$per_page for settings
+function showPostsPaginated($column="", $value="", $offset, $role="") {//$per_page for settings
     $per_page = 2;
     global $connection;
     if (isset($role) && $role == 'admin') {
