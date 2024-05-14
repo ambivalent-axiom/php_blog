@@ -7,7 +7,7 @@
         $subject = escape($subject);
         $body = escape($body);
         //turned off for now due to spam
-        echo "<script>alert('Thank You for Your feedback!');</script>"
+        echo "<script>alert('Thank You for Your feedback!');</script>";
         //sendEmailNotification($email, $subject, $body);
     }
 ?>
