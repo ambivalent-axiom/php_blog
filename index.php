@@ -14,15 +14,15 @@
                     if(isset($_GET['filter'])){
                         switch($_GET['filter']){
                             case 'categorized';
-                                $pages = showPostsPaginated('post_category_id', $_GET['cat_id'], $offset);
+                                $pages = showPostsPaginated('post_category_id', $_GET['cat_id'], $offset, $_SESSION['role']);
                                 break;
 
                             case 'by_author';
-                                $pages = showPostsPaginated('post_author', $_GET["u_id"], $offset);
+                                $pages = showPostsPaginated('post_author', $_GET["u_id"], $offset, $_SESSION['role']);
                                 break;
                         }
                     } else {
-                        $pages = showPostsPaginated("", '', $offset);
+                        $pages = showPostsPaginated("", '', $offset, $_SESSION['role']);
                     }
                 ?>
                 <!-- Pager -->

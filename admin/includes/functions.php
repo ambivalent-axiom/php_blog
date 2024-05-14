@@ -164,6 +164,7 @@ function getPosts($sql) {
         $blog_post_date = $post['post_date'];
         $blog_post_image = $post['post_image'];
         $blog_post_content = $post['post_content'];
+        $blog_post_status = $post['post_status'];
         $author_name = getAuthorByPost($blog_post_author);
         ?>
         <h2>
@@ -180,6 +181,11 @@ function getPosts($sql) {
             <span class='glyphicon glyphicon-time'></span> 
                 Posted on <?php echo $blog_post_date ?>
                 | Comments: <?php echo getCommentCount($blog_post_id) ?>
+                <?php
+                    if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+                        echo " | Status: {$blog_post_status}";
+                    }
+                ?>
         </p>
         <a href='post.php?p_id=<?php echo $blog_post_id ?>'>
             <img class='img-responsive' src='images/<?php echo $blog_post_image ?>' alt=''>
@@ -238,27 +244,42 @@ function resetViews($post_id) {
     checkQuery($update_views);
 }
 //This lists posts on index page + pagination
-function getPostCount($column="", $value="") {
+function getPostCount(string $column="", string $value="", string $prefix): int {
     global $connection;
     if (empty($column)) {
-        $query = "SELECT * FROM posts WHERE post_status = 'published' ORDER BY post_id";
+        $query = $prefix . " ORDER BY post_id";
     } else {
-        $query = "SELECT * FROM posts WHERE post_status = 'published' AND {$column} = {$value} ORDER BY post_id";
+        if(strpos($prefix, 'WHERE')) {
+            $query = $prefix . " AND {$column} = {$value} ORDER BY post_id";
+        } else {
+            $query = $prefix . " WHERE {$column} = {$value} ORDER BY post_id";
+        }
     }
     $select_all_posts = mysqli_query($connection, $query);
     $post_count = mysqli_num_rows($select_all_posts);
     return $post_count;
 }
-function showPostsPaginated($column="", $value="", $offset) {//$per_page for settings
+function showPostsPaginated($column="", $value="", $offset, string $role="") {//$per_page for settings
     $per_page = 2;
     global $connection;
-    if (empty($column)) {
-        $query = "SELECT * FROM posts WHERE post_status = 'published' ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+    if (isset($role) && $role == 'admin') {
+        $prefix = "SELECT * FROM posts";
     } else {
-        $query = "SELECT * FROM posts WHERE post_status = 'published' AND {$column} = {$value} ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+        $prefix = "SELECT * FROM posts WHERE post_status = 'published'";
+    }
+
+    if (empty($column)) {
+        $query = $prefix . " ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+    } else {
+        if(strpos($prefix, 'WHERE')) {
+            $query = $prefix . " AND {$column} = {$value} ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+        } else {
+            $query = $prefix . " WHERE {$column} = {$value} ORDER BY post_id DESC LIMIT {$offset}, {$per_page} ";
+        }
     }
     $select_all_posts = mysqli_query($connection, $query);
-    $post_count = getPostCount($column, $value);
+
+    $post_count = getPostCount($column, $value, $prefix);
     $pages = ceil($post_count/$per_page);
     if($post_count > 0) {
         getPosts($select_all_posts);
