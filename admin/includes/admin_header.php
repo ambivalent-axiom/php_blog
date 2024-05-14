@@ -1,5 +1,6 @@
 <?php include "../includes/db.php"; ?>
 <?php include "functions.php"; ?>
+<?php include "includes/modal.php"; ?>
 <?php ob_start(); ?>
 <?php session_start(); ?>
 <?php $time_out = onlineRegister() ?>
@@ -45,6 +46,7 @@ if(!isset($_SESSION['role'])) {
     <![endif]-->
     <!-- Google charts header -->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+    <!-- include libraries(jQuery, bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 </head>

@@ -2,8 +2,7 @@
     <!-- /#wrapper -->
 
     <!-- Summernote headers -->
-        <!-- include libraries(jQuery, bootstrap) -->
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 
         <!-- include summernote css/js -->
             <link href="css/summernote.css" rel="stylesheet">
@@ -19,7 +18,6 @@
     -->
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
-
 
 </body>
 

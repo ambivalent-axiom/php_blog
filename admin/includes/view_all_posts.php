@@ -97,16 +97,11 @@ if(isset($_POST['checkBoxArray'])) {
                             <td><?php echo $status ?></td>
                             <td><img src='../images/<?php echo $image ?>' alt='image' style="width:100px;height:50px;"></td>
                             <td><?php echo $tags ?></td>
-                            
                             <td><a href="comments.php?p_id=<?php echo $id ?>"><?php echo $comments ?></a></td>
-
                             <td><?php echo $post_views ?></td>
                             <td><?php echo $date ?></td>
-                            <td><a onclick="javascript: 
-                                    return confirm('You are about to permanently delete the post!')
-                                    ;" 
-                                    href="?source=delete&p_id=<?php echo $id ?>">Delete
-                                </a> | 
+                            <td>
+                                <a rel="<?php echo $id ?>" href="javascript:void(0)" class='delete_link'>Delete</a> | 
                                 <a href="?source=edit&p_id=<?php echo $id ?>&notify=edit">Edit</a> | 
                                 <a href="?source=pub&p_id=<?php echo $id ?>">Publish</a> | 
                                 <a href="?source=draft&p_id=<?php echo $id ?>">Draft</a> |
@@ -123,6 +118,21 @@ if(isset($_POST['checkBoxArray'])) {
     </table>
 </form>
 
-
+<script>
+    $(document).ready(function() {
+        $(".delete_link").on('click', function(){
+            const act_msg = "Delete Post";
+            const button_name = "Delete";
+            const id = $(this).attr("rel");
+            const delete_url = "?source=delete&p_id=" + id;
+            const msgs = "Are You sure You want to delete post ID: " + id + "?";
+            $('.btn.btn-danger').text(button_name);
+            $('.modal-title').text(act_msg);
+            $('.modal-body').text(msgs);
+            $('.modal-delete-link').attr("href", delete_url);
+            $("#myModal").modal('show');
+        });
+    });
+</script>
 
 

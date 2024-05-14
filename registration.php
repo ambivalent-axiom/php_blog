@@ -21,15 +21,21 @@
                 $query = "INSERT INTO users (user_name, user_pass, user_email, user_role) VALUES ('{$username}', '{$password}', '{$email}', 'blogger' ) ";
                 $add_user = mysqli_query($connection, $query);
                 checkQuery($add_user);
-                echo "<script>alert('User {$username} registration success!')</script>";
+
+                echo "<script>
+                $(document).ready(function() {
+                    $('.modal-title').text('Registration');
+                    $('.btn.btn-danger').text('OK');
+                    $('.modal-body').text('User {$username} successfully registered');
+                    $('#myModal').modal('show');
+                });
+                </script>";
            
             } 
         }
         
     }
 ?>
-
-
 
     <!-- Navigation -->
     <?php  include "includes/navigation.php"; ?>
@@ -65,10 +71,5 @@
         </div> <!-- /.row -->
     </div> <!-- /.container -->
 </section>
-
-
-        <hr>
-
-
-
+<hr>
 <?php include "includes/footer.php";?>
