@@ -470,13 +470,13 @@ function sendEmailNotification(string $from, string $subject, string $content): 
         $mail->Host       = 'mail.inbox.lv';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'ambax.io@inbox.lv';
-        $mail->Password   = 'JapsTQ786R';
+        $mail->Password   = ''; //here pass
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
         // Recipients
         $mail->setFrom('ambax.io@inbox.lv', $from);
-        $mail->addAddress('artmelnis@gmail.com');
+        $mail->addAddress(''); //here the address to.
 
         // Content
         $mail->isHTML(true);

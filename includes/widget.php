@@ -6,7 +6,9 @@
         $email = escape($email);
         $subject = escape($subject);
         $body = escape($body);
-        sendEmailNotification($email, $subject, $body);
+        //turned off for now due to spam
+        echo "<script>alert('Thank You for Your feedback!');</script>"
+        //sendEmailNotification($email, $subject, $body);
     }
 ?>
 
