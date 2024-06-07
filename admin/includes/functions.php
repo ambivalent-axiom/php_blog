@@ -244,20 +244,20 @@ function resetViews($post_id) {
     checkQuery($update_views);
 }
 //This lists posts on index page + pagination
-function getPostCount($column="", $value="", $prefix) {
+function getPostCount($column="", $value="", $prefix, $order='post_id'): int {
     global $connection;
     if (empty($column)) {
-        $query = $prefix . " ORDER BY post_id";
+        $query = $prefix . " ORDER BY '{$order}'";
     } else {
         if(strpos($prefix, 'WHERE')) {
-            $query = $prefix . " AND {$column} = {$value} ORDER BY post_id";
+            $query = $prefix . " AND {$column} = '{$value}' ORDER BY '{$order}'";
         } else {
-            $query = $prefix . " WHERE {$column} = {$value} ORDER BY post_id";
+            $query = $prefix . " WHERE {$column} = '{$value}' ORDER BY '{$order}'";
         }
     }
     $select_all_posts = mysqli_query($connection, $query);
-    $post_count = mysqli_num_rows($select_all_posts);
-    return $post_count;
+    checkQuery($select_all_posts);
+    return mysqli_num_rows($select_all_posts);
 }
 function showPostsPaginated($column="", $value="", $offset, $role="") {//$per_page for settings
     $per_page = 2;
@@ -408,11 +408,11 @@ function getUsersOnline($time_out) {
         fetchAndPrint($get_user);
     }
 }
-function getUserLnFn() {//takes $_SESSION
+function getUserLnFn(): string {//takes $_SESSION
     if(isset($_SESSION['id'])) {
-        echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
+        return $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
     } else {
-        echo "Unregistered";
+        return "Unregistered";
     }
 }
 function getAuthorByPost($author, $column='user_name') {
@@ -507,5 +507,11 @@ function sendEmailNotification(string $from, string $subject, string $content): 
     } catch (Exception $e) {
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
+}
+function recordCount(string $table): int {
+    global $connection;
+    $query = "SELECT * FROM " . $table;
+    $select_all_posts = mysqli_query($connection, $query);
+    return mysqli_num_rows($select_all_posts);
 }
 ?>

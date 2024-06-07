@@ -12,7 +12,7 @@
                         <h1 class="page-header">
                             Welcome to Admin
                             <small>
-                                <?php getUserLnFn(); ?>
+                                <?php echo getUserLnFn(); ?>
                             </small>
                         </h1>
                     </div>

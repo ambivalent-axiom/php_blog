@@ -11,7 +11,7 @@
                         <h1 class="page-header">
                             Posts
                             
-                            <small><?php getUserLnFn(); ?></small>
+                            <small><?php echo getUserLnFn(); ?></small>
                               |  
                             <?php
                                 if(isset($_GET['notify'])) {

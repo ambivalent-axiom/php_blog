@@ -9,7 +9,7 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Edit categories
-                            <small><?php getUserLnFn(); ?></small>
+                            <small><?php echo getUserLnFn(); ?></small>
                         </h1>
                         <div class="col-xs-6">
                         <?php insert_categories(); ?>

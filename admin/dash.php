@@ -7,13 +7,8 @@
                         <i class="fa fa-file-text fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <?php
-                            $query = "SELECT * FROM posts ";
-                            $select_all_posts = mysqli_query($connection, $query);
-                            $post_counts = mysqli_num_rows($select_all_posts);
-                        ?>
                         <div class='huge'>
-                            <?php echo $post_counts ?>
+                            <?php echo recordCount('posts') ?>
                         </div>
                         <div>Posts</div>
                     </div>
@@ -36,12 +31,7 @@
                         <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <?php
-                            $query = "SELECT * FROM comments ";
-                            $select_all_comments = mysqli_query($connection, $query);
-                            $comment_counts = mysqli_num_rows($select_all_comments);
-                        ?>
-                        <div class='huge'><?php echo $comment_counts ?></div>
+                        <div class='huge'><?php echo recordCount('comments') ?></div>
                         <div>Comments</div>
                     </div>
                 </div>
@@ -63,12 +53,7 @@
                         <i class="fa fa-user fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <?php
-                            $query = "SELECT * FROM users ";
-                            $select_all_users = mysqli_query($connection, $query);
-                            $user_counts = mysqli_num_rows($select_all_users);
-                        ?>
-                        <div class='huge'><?php echo $user_counts ?></div>
+                        <div class='huge'><?php echo recordCount('users') ?></div>
                         <div> Users</div>
                     </div>
                 </div>
@@ -90,12 +75,7 @@
                         <i class="fa fa-list fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <?php
-                            $query = "SELECT * FROM categories ";
-                            $select_all_categories = mysqli_query($connection, $query);
-                            $category_counts = mysqli_num_rows($select_all_categories);
-                        ?>
-                        <div class='huge'><?php echo $category_counts ?></div>
+                        <div class='huge'><?php echo recordCount('categories') ?></div>
                         <div>Categories</div>
                     </div>
                 </div>
@@ -112,7 +92,6 @@
 </div>
 
 <!-- /.row -->
-
 <div class="row">
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart', 'bar']});
@@ -123,14 +102,9 @@
             ['', 'Count'],
 
             <?php
-                $query_get_pending_comments = "SELECT * FROM comments WHERE com_status = 'Pending' ";
-                $query_get_draft_posts = "SELECT * FROM posts WHERE post_status = 'draft' ";
-                $get_pending_comments = mysqli_query($connection, $query_get_pending_comments);
-                $get_draft_posts = mysqli_query($connection, $query_get_draft_posts);
-                $penging_comment_count = mysqli_num_rows($get_pending_comments);
-                $draft_post_count = mysqli_num_rows($get_draft_posts);
+                $penging_comment_count = getPostCount('com_status', 'Pending', "SELECT * FROM comments");
+                $draft_post_count = getPostCount('post_status', 'draft', "SELECT * FROM posts");
                 $users_online = mysqli_num_rows(countUsrsOn());
-
                 $element_text = ['Draft Posts', 'Pending Comments', 'Users Online'];
                 $element_count = [$draft_post_count, $penging_comment_count, $users_online];
                 for($i = 0; $i < 3; $i++) {

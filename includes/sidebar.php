@@ -24,7 +24,7 @@
 
         <?php
             if (isset($_SESSION['id'])) {
-                echo "<h4>Logged in as: " . $_SESSION['first_nm'] . " " . $_SESSION['last_nm'] . "</h4>";
+                echo "<h4>Logged in as: " . getUserLnFn() . "</h4>";
                 ?>
                     <form action="includes/logout.php" method="post">
                         <div class="form-group">
