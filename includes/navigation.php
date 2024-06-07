@@ -18,14 +18,29 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <?php
-                    $query = "SELECT * FROM categories ";
-                    $select_all_categories_query = mysqli_query($connection, $query);
+                        $query = "SELECT * FROM categories ";
+                        $select_all_categories_query = mysqli_query($connection, $query);
 
-                    while($row = mysqli_fetch_assoc($select_all_categories_query)) {
-                        $cat_title = $row['cat_title'];
-                        $cat_id = $row['cat_id'];
-                        echo "<li><a href='index.php?cat_id={$cat_id}&filter=categorized'>{$cat_title}</a></li>";
-                    }
+                        while($row = mysqli_fetch_assoc($select_all_categories_query)) {
+                            $cat_title = $row['cat_title'];
+                            $cat_id = $row['cat_id'];
+
+
+                            $category_class = '';
+                            $registration_class = '';
+                            $pageName = basename($_SERVER['PHP_SELF']);
+                            $registration = 'registration.php';
+
+
+                            if(isset($_GET['cat_id']) && $_GET['cat_id'] == $cat_id) {
+                                $category_class = 'active';
+                            } else if ($pageName == $registration) {
+                                $registration_class = 'active';
+                            }
+
+
+                            echo "<li class='{$category_class}'><a href='index.php?cat_id={$cat_id}&filter=categorized'>{$cat_title}</a></li>";
+                        }
                     ?>
                 </ul>
                 <?php
@@ -34,7 +49,7 @@
                                 <li><a href='admin'>{$_SESSION['username']}</a></li></ul>";
                     } else {
                         echo "<ul class='nav navbar-nav navbar-right'>
-                                <li><a href='registration.php'>Register</a></li></ul>";
+                                <li class='{$registration_class}'><a href='registration.php'>Register</a></li></ul>";
                     }
                 ?>
             </div>

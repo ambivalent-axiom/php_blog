@@ -11,18 +11,20 @@
             <div class="col-md-8">
                 <!-- First Blog Post -->
                 <?php
+                    isset($_SESSION['role']) ? $role = $_SESSION['role'] : $role = "";
+                    
                     if(isset($_GET['filter'])){
                         switch($_GET['filter']){
                             case 'categorized';
-                                $pages = showPostsPaginated('post_category_id', $_GET['cat_id'], $offset, $_SESSION['role']);
+                                $pages = showPostsPaginated('post_category_id', $_GET['cat_id'], $offset, $role);
                                 break;
 
                             case 'by_author';
-                                $pages = showPostsPaginated('post_author', $_GET["u_id"], $offset, $_SESSION['role']);
+                                $pages = showPostsPaginated('post_author', $_GET["u_id"], $offset, $role);
                                 break;
                         }
                     } else {
-                        $pages = showPostsPaginated("", '', $offset, $_SESSION['role']);
+                        $pages = showPostsPaginated("", '', $offset, $role);
                     }
                 ?>
                 <!-- Pager -->
