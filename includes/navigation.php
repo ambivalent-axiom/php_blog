@@ -25,7 +25,7 @@
                             $cat_title = $row['cat_title'];
                             $cat_id = $row['cat_id'];
 
-
+                            //to set button class active
                             $category_class = '';
                             $registration_class = '';
                             $pageName = basename($_SERVER['PHP_SELF']);

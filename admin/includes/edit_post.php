@@ -62,8 +62,11 @@
                 while($row = mysqli_fetch_assoc($select_categories_all)) {
                     $cat_title = $row['cat_title'];
                     $cat_id = $row['cat_id'];
-                    echo $cat_id;
-                    echo "<option value='{$cat_id}'>{$cat_title}</option>";
+                    if ($cat_id == $cat) {
+                        echo "<option selected value='{$cat_id}'>{$cat_title}</option>";
+                    } else {
+                        echo "<option value='{$cat_id}'>{$cat_title}</option>";
+                    }
                 }
             ?>
         </select>
@@ -73,12 +76,19 @@
         <label for="post_status">Post Status</label>
         <select class="form-control" name="post_status" id="">
             <option value="<?php if(isset($status)) { echo $status; } ?>"><?php echo $status; ?></option>
-            <option value="<?php 
-                if($status === 'draft') {
-                    echo $stt = "published";
-                } else {
-                    echo $stt = 'draft';
-                } ?>"><?php echo $stt; ?></option>
+            <option value="
+                <?php 
+                    if($status === 'draft') {
+                        echo $stt = "published";
+                    } else {
+                        echo $stt = 'draft';
+                    } 
+                ?>
+            ">
+                <?php 
+                    echo $stt; 
+                ?>
+            </option>
         </select>
     </div>
 

@@ -20,32 +20,53 @@
 
 <!-- Login Well -->
 <div class="well">
-    <form action="includes/login.php" method="post">
-        <h4>Login: 
-            <?php 
-                if(isset($_GET['login'])) {
-                    echo $_GET['login'];
-                } else if (isset($_SESSION['id'])) {
-                    echo $_SESSION['first_nm'] . " " . $_SESSION['last_nm'];
-                } else {
-                    echo "";
-                }
-            ?>
-        </h4>
-        <div class="form-group">
-            <div class="form-group">
-                <input name="username" type="text" class="form-control" placeholder="Username">
-            </div>
-            <div class="input-group">
-                <input name="pass" type="password" class="form-control" placeholder="Password">
-                <span class="input-group-btn">
-                    <button name="login" class="btn btn-primary" type="submit">
-                        Login
-                    </button>
-                </span>
-            </div>
-        </div>
-    </form>
+    
+
+        <?php
+            if (isset($_SESSION['id'])) {
+                echo "<h4>Logged in as: " . $_SESSION['first_nm'] . " " . $_SESSION['last_nm'] . "</h4>";
+                ?>
+                    <form action="includes/logout.php" method="post">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button name="logout" class="btn btn-primary" type="submit">
+                                        Logout
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                <?php
+            } else {
+                ?>
+                    <form action="includes/login.php" method="post">
+                        <h4>Login: 
+                            <?php 
+                                if(isset($_GET['login'])) {
+                                    echo $_GET['login'];
+                                } else {
+                                    echo "";
+                                }
+                            ?>
+                        </h4>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <input name="username" type="text" class="form-control" placeholder="Username">
+                            </div>
+                            <div class="input-group">
+                                <input name="pass" type="password" class="form-control" placeholder="Password">
+                                <span class="input-group-btn">
+                                    <button name="login" class="btn btn-primary" type="submit">
+                                        Login
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                <?php
+            }
+        ?>
 </div>
 
 <!-- Blog Categories Well -->
