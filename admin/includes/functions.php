@@ -132,13 +132,19 @@ function draftPost($post_id) {
 }
 function getAllPosts($access) {
     global $connection;
+    $query = "SELECT posts.post_id, posts.post_author, posts.post_title, posts.post_category_id, " . 
+    "posts.post_status, posts.post_image, posts.post_tags, posts.post_date, posts.post_views, " . 
+    "categories.cat_id, categories.cat_title FROM posts LEFT JOIN categories ON " . 
+    "posts.post_category_id = categories.cat_id ";
+    $where = "WHERE posts.post_author = {$access} ";
+    $order = "ORDER BY posts.post_id DESC ";
     if($access === 'admin') {
-        $query = "SELECT * FROM posts ORDER BY post_id DESC ";
-        $all_posts = mysqli_query($connection, $query);
+        $all_posts = mysqli_query($connection, $query . $order);
+        checkQuery($all_posts);
         return $all_posts;
     } else {
-        $query = "SELECT * FROM posts WHERE post_author = {$access} ORDER BY post_id DESC ";
-        $all_posts = mysqli_query($connection, $query);
+        $all_posts = mysqli_query($connection, $query . $where . $order);
+        checkQuery($all_posts);
         return $all_posts;
     }
 }

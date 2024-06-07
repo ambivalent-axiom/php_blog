@@ -71,29 +71,24 @@ if(isset($_POST['checkBoxArray'])) {
                 }
                 
                 while($row = mysqli_fetch_assoc($all_posts)) {
-                    $id = $row['post_id'];
-                    $author = $row['post_author'];
-                    $title = $row['post_title'];
-                    $cat = $row['post_category_id'];
-                    $status = $row['post_status'];
-                    $image = $row['post_image'];
-                    $tags = $row['post_tags'];
-                    $comments = getCommentCount($id);
-                    $date = $row['post_date'];
-                    $author_name = getAuthorByPost($author);
-                    $post_views = $row['post_views'];
+                    $id             = $row['post_id'];
+                    $author         = $row['post_author'];
+                    $title          = $row['post_title'];
+                    $cat            = $row['post_category_id'];
+                    $status         = $row['post_status'];
+                    $image          = $row['post_image'];
+                    $tags           = $row['post_tags'];
+                    $comments       = getCommentCount($id);
+                    $date           = $row['post_date'];
+                    $author_name    = getAuthorByPost($author);
+                    $post_views     = $row['post_views'];
+                    $cat_title      = $row['cat_title'];
                     ?>  <tr>
                             <td><input class="checkBoxes" type="checkbox" name="checkBoxArray[]" value="<?php echo $id; ?>"></td>
                             <td><?php echo $id ?></td>
                             <td><?php echo $author_name ?></td>
                             <td><a href="../post.php?p_id=<?php echo $id; ?>"><?php echo $title ?></a></td>
-                            <td><?php 
-                                $query = "SELECT cat_title FROM categories WHERE cat_id = {$cat} ";
-                                $get_cat_name = mysqli_query($connection, $query);
-                                checkQuery($get_cat_name);
-                                $row = mysqli_fetch_assoc($get_cat_name);
-                                echo $row['cat_title'];
-                            ?></td>
+                            <td><?php echo $cat_title ?></td>
                             <td><?php echo $status ?></td>
                             <td><img src='../images/<?php echo $image ?>' alt='image' style="width:100px;height:50px;"></td>
                             <td><?php echo $tags ?></td>
