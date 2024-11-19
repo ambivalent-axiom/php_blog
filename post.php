@@ -56,7 +56,9 @@
                         <img class='img-responsive' src='images/<?php echo $blog_post_image; ?>' alt=''>
                     <hr>
                         <p>
-                            <?php echo $blog_post_content; ?>
+                            <?php
+                                echo $blog_post_content;
+                            ?>
                         </p>
                     <hr>
 
